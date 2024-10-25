@@ -1,3 +1,0 @@
-/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/cmake-build-debug/CMakeFiles/Proyecto2_3D_Renderer.dir
-/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
