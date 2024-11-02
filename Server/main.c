@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
+#include "../RSA/rsa.h"
 
 #define PORT 8080
 

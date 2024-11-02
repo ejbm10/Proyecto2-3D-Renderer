@@ -33,6 +33,18 @@ int init_client() {
     return 0;
 }
 
+unsigned long long stringToInteger(const char *str) {
+    unsigned long long num = 0;
+    size_t len = strlen(str);
+
+    // Combine ASCII values into a single integer
+    for (size_t i = 0; i < len; i++) {
+        num = num * 256 + (unsigned char)str[i]; // Shift and add the ASCII value
+    }
+
+    return num;
+}
+
 void send_message(char const *message) {
     send(client_fd, message, strlen(message), 0);
 }
@@ -45,11 +57,11 @@ int main(int argc, char const* argv[])
 {
     int active = 1;
 
-    if (init_client() < 0) {
-        return -1;
-    }
+    //if (init_client() < 0) {
+        //return -1;
+    //}
 
-    printf("Successfully connected\n");
+    //printf("Successfully connected\n");
 
     while (active) {
         scanf("%s", buffer);
@@ -58,10 +70,14 @@ int main(int argc, char const* argv[])
             active = 0;
         }
 
-        send_message(buffer);
+        printf("%lld\n", stringToInteger(buffer));
+
+        printf("%c\n", integerToString(stringToInteger(buffer)));
+
+        //send_message(buffer);
     }
 
-    close(client_fd);
+    //close(client_fd);
 
     return 0;
 }
