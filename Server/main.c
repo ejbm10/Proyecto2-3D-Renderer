@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "../RSA/rsa.h"
+#include "RSA/rsa.h"
 
 #define PORT 8080
 
@@ -60,14 +60,17 @@ int main(int argc, char const* argv[])
         return -1;
     }
 
-    printf("Waiting for connection...\n");
-
+    struct RSAKeyPair *keys = generate_keys();
+    printf("Waiting for connection...\n\n");
+    unsigned long long num;
     while (active) {
         if (client_fd > 0) {
             receive_message(client_fd);
+            memcpy(&num, buffer, sizeof(unsigned long long));
+            snprintf(buffer, sizeof(buffer), "%s", ASCIIToMessage(rsa_decrypt(num, keys->private_key)));
 
             if (strcmp(buffer, "exit") == 0) {
-                printf("Client disconnected\n");
+                printf("Client disconnected!\n");
                 close(client_fd);
                 client_fd = -1;
             }
@@ -87,7 +90,16 @@ int main(int argc, char const* argv[])
             perror("Accept failed");
             return -1;
         } else {
-            printf("Client connected\n");
+            printf("Client connected!\n");
+            // Send the public key to the client after connection
+            char key_buffer[256];
+            snprintf(key_buffer, sizeof(key_buffer), "%lld,%lld", keys->public_key->modulus, keys->public_key->exponent);
+
+            if (send(client_fd, key_buffer, strlen(key_buffer), 0) == -1) {
+                perror("Error sending public key");
+                close(client_fd);
+                client_fd = -1;
+            }
         }
     }
 

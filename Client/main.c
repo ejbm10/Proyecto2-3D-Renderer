@@ -1,8 +1,11 @@
 #include <arpa/inet.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#include "RSA/rsa.h"
 
 #define PORT 8080
 
@@ -33,18 +36,6 @@ int init_client() {
     return 0;
 }
 
-unsigned long long stringToInteger(const char *str) {
-    unsigned long long num = 0;
-    size_t len = strlen(str);
-
-    // Combine ASCII values into a single integer
-    for (size_t i = 0; i < len; i++) {
-        num = num * 256 + (unsigned char)str[i]; // Shift and add the ASCII value
-    }
-
-    return num;
-}
-
 void send_message(char const *message) {
     send(client_fd, message, strlen(message), 0);
 }
@@ -57,27 +48,40 @@ int main(int argc, char const* argv[])
 {
     int active = 1;
 
-    //if (init_client() < 0) {
-        //return -1;
-    //}
+    if (init_client() < 0) {
+        return -1;
+    }
 
-    //printf("Successfully connected\n");
+    printf("Successfully connected\n");
+
+    char key_buffer[256];
+    if (recv(client_fd, key_buffer, sizeof(key_buffer), 0) <= 0) {
+        perror("Error receiving public key");
+        close(client_fd);
+        return -1;
+    }
+
+    // Parse the received public key
+    struct RSAKey *key = malloc(sizeof(struct RSAKey));
+
+    sscanf(key_buffer, "%lld,%lld", &key->modulus, &key->exponent);
+    printf("Public Key: (%lld, %lld)\n", key->modulus, key->exponent);
 
     while (active) {
+
         scanf("%s", buffer);
 
         if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "shutdown") == 0) {
             active = 0;
         }
 
-        printf("%lld\n", stringToInteger(buffer));
-
-        printf("%c\n", integerToString(stringToInteger(buffer)));
-
-        //send_message(buffer);
+        printf("ASCII: %lld\n", messageToASCII(buffer));
+        printf("Encriptado: %lld\n", rsa_encrypt(messageToASCII(buffer), key));
+        snprintf(buffer, sizeof(buffer), "%lld", rsa_encrypt(messageToASCII(buffer), key));
+        send_message(buffer);
     }
 
-    //close(client_fd);
+    close(client_fd);
 
     return 0;
 }

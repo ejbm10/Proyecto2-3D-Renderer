@@ -55,6 +55,12 @@ build CMakeFiles/Client.dir/main.c.o: C_COMPILER__Client_unscanned_Debug /home/e
   OBJECT_DIR = CMakeFiles/Client.dir
   OBJECT_FILE_DIR = CMakeFiles/Client.dir
 
+build CMakeFiles/Client.dir/RSA/rsa.c.o: C_COMPILER__Client_unscanned_Debug /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/RSA/rsa.c || cmake_object_order_depends_target_Client
+  DEP_FILE = CMakeFiles/Client.dir/RSA/rsa.c.o.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Client.dir
+  OBJECT_FILE_DIR = CMakeFiles/Client.dir/RSA
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Client
@@ -63,7 +69,7 @@ build CMakeFiles/Client.dir/main.c.o: C_COMPILER__Client_unscanned_Debug /home/e
 #############################################
 # Link the executable Client
 
-build Client: C_EXECUTABLE_LINKER__Client_Debug CMakeFiles/Client.dir/main.c.o
+build Client: C_EXECUTABLE_LINKER__Client_Debug CMakeFiles/Client.dir/main.c.o CMakeFiles/Client.dir/RSA/rsa.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Client.dir
   POST_BUILD = :

@@ -16,7 +16,7 @@ struct RSAKey {
 };
 
 struct RSAKeyPair* generate_keys();
-void rsa_encrypt();
-void rsa_decrypt();
+char* ASCIIToMessage(unsigned long long num);
+unsigned long long rsa_decrypt(unsigned long long ciphertext, const struct RSAKey *private_key);
 
 #endif //RSA_H

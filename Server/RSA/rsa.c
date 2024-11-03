@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-int power(b,e) {
+int power(int b, int e) {
     if (e == 0) {
         return 1;
     }
@@ -29,6 +29,29 @@ int is_coprime(long long const num1, long long const num2) {
         return 0;
     }
     return is_coprime(num2, num1 % num2);
+}
+
+char* ASCIIToMessage(unsigned long long num) {
+    int length = 0;
+    unsigned long long tmp = num;
+    while (tmp > 0) {
+        length++;
+        tmp /= 256;
+    }
+
+    char* message = malloc(length + 1);
+
+    if (!message) return NULL;
+
+    char *ptr = message + length;
+    *ptr-- = '\0';
+
+    while (num > 0) {
+        *ptr-- = (char) (num % 256);
+        num /= 256;
+    }
+
+    return message;
 }
 
 int generate_prime(int const bits) {
@@ -99,10 +122,21 @@ struct RSAKeyPair* generate_keys() {
     return keys;
 }
 
-void rsa_encrypt() {
+unsigned long long rsa_decrypt(unsigned long long ciphertext, const struct RSAKey *private_key) {
+    unsigned long long result = 1;
+    unsigned long long mod = private_key->modulus;
+    unsigned long long exp = private_key->exponent;
+    ciphertext = ciphertext % mod;
 
-}
+    while (exp > 0) {
+        // If exp is odd, multiply base with result
+        if (exp % 2 == 1) {
+            result = (result * ciphertext) % mod;
+        }
 
-void rsa_decrypt() {
-
+        // Square the base and reduce exp by half
+        exp = exp >> 1; // equivalent to exp / 2
+        ciphertext = (ciphertext * ciphertext) % mod;
+    }
+    return result;
 }
