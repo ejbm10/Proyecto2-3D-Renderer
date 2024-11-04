@@ -23,12 +23,13 @@ int is_prime(int const num, int const i_num) {
     return is_prime(num, i_num - 1);
 }
 
-int is_coprime(long long const num1, long long const num2) {
-    if (num2 == 0) {
-        if (num1 == 1) return 1;
-        return 0;
+int is_coprime(long long a, long long b) {
+    while (b != 0) {
+        long long temp = b;
+        b = a % b;
+        a = temp;
     }
-    return is_coprime(num2, num1 % num2);
+    return a == 1 ? 1 : 0;
 }
 
 char* ASCIIToMessage(unsigned long long num) {
@@ -54,8 +55,7 @@ char* ASCIIToMessage(unsigned long long num) {
     return message;
 }
 
-int generate_prime(int const bits) {
-    srand(time(NULL));
+long long generate_prime(int const bits) {
     int const low_bound = power(2, bits-1);
     int const high_bound = power(2, bits);
 
@@ -76,6 +76,8 @@ long long generate_coprime(long long n) {
     return e;
 }
 
+// Function to perform the Extended Euclidean Algorithm
+// It returns the gcd of a and b, and finds x and y such that ax + by = gcd(a, b)
 long long extended_gcd(long long a, long long b, long long *x, long long *y) {
     if (b == 0) {
         *x = 1;
@@ -89,21 +91,24 @@ long long extended_gcd(long long a, long long b, long long *x, long long *y) {
     return gcd;
 }
 
+// Function to calculate modular inverse of e mod phi
 long long mod_inverse(long long e, long long phi) {
     long long x, y;
     long long gcd = extended_gcd(e, phi, &x, &y);
     if (gcd != 1) {
-        return -1; // Inverse doesn't exist
+        // Modular inverse doesn't exist if e and phi are not coprime
+        return -1; // or handle the error as needed
     }
+    // x might be negative, so convert it to a positive value
     return (x % phi + phi) % phi;
 }
 
 struct RSAKeyPair* generate_keys() {
-    const int p = generate_prime(16);
-    const int q = generate_prime(16);
+    const long long p = generate_prime(16);
+    const long long q = generate_prime(16);
 
-    const long long n = (long long) p * (long long) q;
-    const long long phi = (long long) (p - 1) * (long long) (q - 1);
+    const long long n = p * q;
+    const long long phi = (p - 1) * (q - 1);
 
     const long long e = generate_coprime(phi);
 

@@ -44,57 +44,46 @@ int init_server() {
     return 0;
 }
 
-void send_message(char const *message) {
-    send(server_fd, message, strlen(message), 0);
-}
-
-void receive_message(const int current_socket) {
-    read(current_socket, buffer, 1023);
-}
-
 int main(int argc, char const* argv[])
 {
+    srand(time(NULL));
     int active = 1;
-
     if (init_server() < 0) {
         return -1;
     }
-
     struct RSAKeyPair *keys = generate_keys();
-    printf("Waiting for connection...\n\n");
-    unsigned long long num;
+    printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
+    char* end;
     while (active) {
         if (client_fd > 0) {
-            receive_message(client_fd);
-            memcpy(&num, buffer, sizeof(unsigned long long));
-            snprintf(buffer, sizeof(buffer), "%s", ASCIIToMessage(rsa_decrypt(num, keys->private_key)));
-
+            if (recv(client_fd, buffer, 1023, 0) < 0) {
+                perror("Received failed");
+                close(client_fd);
+                return -1;
+            }
+            //snprintf(buffer, 1023, "%s", buffer);
             if (strcmp(buffer, "exit") == 0) {
                 printf("Client disconnected!\n");
                 close(client_fd);
                 client_fd = -1;
             }
-
-            else if (strcmp(buffer, "shutdown") == 0) {
+            else if (strcmp(buffer, "shut") == 0) {
                 printf("Shutting down...\n");
                 close(client_fd);
                 active = 0;
             }
-
             else {
                 printf("Client: %s\n", buffer);
             }
-
             memset(buffer, 0, sizeof(buffer));
         } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
             perror("Accept failed");
             return -1;
         } else {
-            printf("Client connected!\n");
+            printf("Client connected!\n\n");
             // Send the public key to the client after connection
             char key_buffer[256];
             snprintf(key_buffer, sizeof(key_buffer), "%lld,%lld", keys->public_key->modulus, keys->public_key->exponent);
-
             if (send(client_fd, key_buffer, strlen(key_buffer), 0) == -1) {
                 perror("Error sending public key");
                 close(client_fd);
@@ -102,9 +91,7 @@ int main(int argc, char const* argv[])
             }
         }
     }
-
     close(server_fd);
-
     return 0;
 }
 
