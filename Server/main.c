@@ -4,9 +4,9 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <pthread.h>
 #include "RSA/rsa.h"
-#include <mpi.h>
+#include <mpi/mpi.h>
+#include <time.h>
 
 #define PORT 8080
 
