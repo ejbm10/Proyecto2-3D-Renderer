@@ -62,11 +62,11 @@ int main(int argc, char const* argv[])
                 return -1;
             }
 
-            printf("Original: %s\n", buffer);
+            char final_msg[1024] = { 0 };
             char* token = strtok(buffer, "|");
 
             while (token != NULL) {
-                strcat(buffer, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
+                strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
                 token = strtok(NULL, "|");
             }
 
@@ -83,7 +83,7 @@ int main(int argc, char const* argv[])
             }
 
             else {
-                printf("Client: %s\n", buffer);
+                printf("Client: %s\n", final_msg);
             }
         } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
             perror("Accept failed");

@@ -61,10 +61,12 @@ int main(int argc, char const* argv[])
 
         int blocks =(int) messageToASCII(input_buffer, -1, key);
 
-        printf("%d", blocks);
-
         for (int i = 0; i < blocks; i++) {
-            snprintf(block_buffer, sizeof(block_buffer), "%llu|", rsa_encrypt(messageToASCII(input_buffer, blocks, key), key));
+            if (i + 1 == blocks) {
+                snprintf(block_buffer, sizeof(block_buffer), "%llu", rsa_encrypt(messageToASCII(input_buffer, i, key), key));
+            } else {
+                snprintf(block_buffer, sizeof(block_buffer), "%llu|", rsa_encrypt(messageToASCII(input_buffer, i, key), key));
+            }
             strcat(msg_buffer, block_buffer);
         }
 
