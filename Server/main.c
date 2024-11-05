@@ -62,6 +62,8 @@ int main(int argc, char const* argv[])
                 return -1;
             }
 
+            printf("Incoming: %s\n", buffer);
+
             char final_msg[1024] = { 0 };
             char* token = strtok(buffer, "|");
 
@@ -85,6 +87,9 @@ int main(int argc, char const* argv[])
             else {
                 printf("Client: %s\n", final_msg);
             }
+
+            memset(buffer, 0, sizeof(buffer));
+
         } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
             perror("Accept failed");
             return -1;

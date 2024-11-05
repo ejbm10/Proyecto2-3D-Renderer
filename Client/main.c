@@ -70,6 +70,7 @@ int main(int argc, char const* argv[])
             strcat(msg_buffer, block_buffer);
         }
 
+        printf("Encripted message: %s\n", msg_buffer);
         if (send(client_fd, msg_buffer, strlen(msg_buffer), 0) < 0) {
             perror("Error sending message");
             active = 0;
