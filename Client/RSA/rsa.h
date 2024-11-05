@@ -6,11 +6,11 @@
 #define RSA_H
 
 struct RSAKey {
-    long long modulus;
-    long long exponent;
+    unsigned long long modulus;
+    unsigned long long exponent;
 };
 
-unsigned long long messageToASCII(const char *str);
+unsigned long long messageToASCII(const char *str, int block, struct RSAKey *key);
 unsigned long long rsa_encrypt(unsigned long long message, const struct RSAKey *public_key);
 
 #endif //RSA_H

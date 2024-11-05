@@ -53,7 +53,7 @@ int main(int argc, char const* argv[])
     }
     struct RSAKeyPair *keys = generate_keys();
     printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
-    char* end;
+
     while (active) {
         if (client_fd > 0) {
             if (recv(client_fd, buffer, 1023, 0) < 0) {
@@ -61,21 +61,30 @@ int main(int argc, char const* argv[])
                 close(client_fd);
                 return -1;
             }
-            //snprintf(buffer, 1023, "%s", buffer);
+
+            printf("Original: %s\n", buffer);
+            char* token = strtok(buffer, "|");
+
+            while (token != NULL) {
+                strcat(buffer, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
+                token = strtok(NULL, "|");
+            }
+
             if (strcmp(buffer, "exit") == 0) {
                 printf("Client disconnected!\n");
                 close(client_fd);
                 client_fd = -1;
             }
+
             else if (strcmp(buffer, "shut") == 0) {
                 printf("Shutting down...\n");
                 close(client_fd);
                 active = 0;
             }
+
             else {
                 printf("Client: %s\n", buffer);
             }
-            memset(buffer, 0, sizeof(buffer));
         } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
             perror("Accept failed");
             return -1;

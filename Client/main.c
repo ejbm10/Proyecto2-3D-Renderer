@@ -12,7 +12,9 @@
 int status, client_fd;
 struct sockaddr_in serv_addr;
 
-char buffer[1024];
+char input_buffer[1024];
+char msg_buffer[1024];
+char block_buffer[1024];
 
 int init_client() {
     if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -51,18 +53,29 @@ int main(int argc, char const* argv[])
     sscanf(key_buffer, "%lld,%lld", &key->modulus, &key->exponent);
 
     printf("Successfully connected!\nPublic key: (%lld, %lld)\n\n", key->modulus, key->exponent);
-
     while (active) {
-        scanf("%s", buffer);
-        if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "shut") == 0) active = 0;
-        printf("ASCII: %llu\n", messageToASCII(buffer));
-        snprintf(buffer, sizeof(buffer), "%llu", rsa_encrypt(messageToASCII(buffer), key));
-        printf("%s\n", buffer);
-        if (send(client_fd, buffer, strlen(buffer), 0) < 0) {
+
+        scanf("%s", input_buffer);
+
+        if (strcmp(input_buffer, "exit") == 0 || strcmp(input_buffer, "shut") == 0) active = 0;
+
+        int blocks =(int) messageToASCII(input_buffer, -1, key);
+
+        printf("%d", blocks);
+
+        for (int i = 0; i < blocks; i++) {
+            snprintf(block_buffer, sizeof(block_buffer), "%llu|", rsa_encrypt(messageToASCII(input_buffer, blocks, key), key));
+            strcat(msg_buffer, block_buffer);
+        }
+
+        if (send(client_fd, msg_buffer, strlen(msg_buffer), 0) < 0) {
             perror("Error sending message");
             active = 0;
         }
+
+        memset(msg_buffer, 0, sizeof(msg_buffer));
     }
+    free(key);
     close(client_fd);
     return 0;
 }
