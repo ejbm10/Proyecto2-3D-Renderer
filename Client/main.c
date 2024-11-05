@@ -25,7 +25,7 @@ int init_client() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, "192.168.0.19", &serv_addr.sin_addr) <= 0) {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
     }
@@ -55,22 +55,23 @@ int main(int argc, char const* argv[])
     printf("Successfully connected!\nPublic key: (%lld, %lld)\n\n", key->modulus, key->exponent);
     while (active) {
 
-        scanf("%s", input_buffer);
+        printf("Enter message: ");
+        if (fgets(input_buffer, sizeof(input_buffer), stdin) == NULL) {
+            perror("Error reading input");
+            active = 0;
+        }
+        input_buffer[strcspn(input_buffer, "\n")] = '\0';
 
         if (strcmp(input_buffer, "exit") == 0 || strcmp(input_buffer, "shutdown") == 0) active = 0;
 
         int blocks =(int) messageToASCII(input_buffer, -1, key);
 
         for (int i = 0; i < blocks; i++) {
-            if (i + 1 == blocks) {
-                snprintf(block_buffer, sizeof(block_buffer), "%llu", rsa_encrypt(messageToASCII(input_buffer, i, key), key));
-            } else {
-                snprintf(block_buffer, sizeof(block_buffer), "%llu|", rsa_encrypt(messageToASCII(input_buffer, i, key), key));
-            }
+            snprintf(block_buffer, sizeof(block_buffer), "%llu|", rsa_encrypt(messageToASCII(input_buffer, i, key), key));
+    
             strcat(msg_buffer, block_buffer);
         }
 
-        printf("Encripted message: %s\n", msg_buffer);
         if (send(client_fd, msg_buffer, strlen(msg_buffer), 0) < 0) {
             perror("Error sending message");
             active = 0;
