@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include "RSA/rsa.h"
+#include <mpi.h>
 
 #define PORT 8080
 
@@ -46,66 +47,82 @@ int init_server() {
 
 int main(int argc, char const* argv[])
 {
+    MPI_Init(&argc, &argv);
+
     srand(time(NULL));
-    int active = 1;
-    if (init_server() < 0) {
-        return -1;
-    }
-    struct RSAKeyPair *keys = generate_keys();
-    printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
 
-    printf("Waiting for connection...\n");
+    int my_rank;
 
-    while (active) {
-        if (client_fd > 0) {
-            if (recv(client_fd, buffer, 1023, 0) < 0) {
-                perror("Received failed");
-                close(client_fd);
-                return -1;
-            }
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-            char final_msg[1024] = { 0 };
-            char* token = strtok(buffer, "|");
-
-            while (token != NULL) {
-                strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
-                token = strtok(NULL, "|");
-            }
-
-            if (strcmp(final_msg, "exit") == 0) {
-                printf("Client disconnected\n\n");
-                close(client_fd);
-                client_fd = -1;
-            }
-
-            else if (strcmp(final_msg, "shutdown") == 0) {
-                printf("Server shutting down...\n");
-                close(client_fd);
-                active = 0;
-            }
-
-            else {
-                printf("Client: %s\n", final_msg);
-            }
-
-            memset(buffer, 0, sizeof(buffer));
-
-        } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
-            perror("Accept failed");
+    if (my_rank == 0) {
+        int active = 1;
+        if (init_server() < 0) {
             return -1;
-        } else {
-            printf("Client connected\n\n");
-            // Send the public key to the client after connection
-            char key_buffer[256];
-            snprintf(key_buffer, sizeof(key_buffer), "%lld,%lld", keys->public_key->modulus, keys->public_key->exponent);
-            if (send(client_fd, key_buffer, strlen(key_buffer), 0) == -1) {
-                perror("Error sending public key");
-                close(client_fd);
-                client_fd = -1;
+        }
+        struct RSAKeyPair *keys = generate_keys();
+        printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
+
+        printf("Waiting for connection...\n");
+
+        while (active) {
+            if (client_fd > 0) {
+                if (recv(client_fd, buffer, 1023, 0) < 0) {
+                    perror("Received failed");
+                    close(client_fd);
+                    return -1;
+                }
+
+                char final_msg[1024] = { 0 };
+                char* token = strtok(buffer, "|");
+
+                while (token != NULL) {
+                    strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
+                    token = strtok(NULL, "|");
+                }
+
+                if (strcmp(final_msg, "exit") == 0) {
+                    printf("Client disconnected\n\n");
+                    close(client_fd);
+                    client_fd = -1;
+                }
+
+                else if (strcmp(final_msg, "shutdown") == 0) {
+                    printf("Server shutting down...\n");
+                    close(client_fd);
+                    active = 0;
+                }
+
+                else {
+                    printf("Client: %s\n", final_msg);
+                    MPI_Send(final_msg, strlen(final_msg) + 1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                }
+
+                memset(buffer, 0, sizeof(buffer));
+
+            } else if ((client_fd = accept(server_fd, (struct sockaddr*) &address, (socklen_t*) &addrlen)) < 0) {
+                perror("Accept failed");
+                return -1;
+            } else {
+                printf("Client connected\n\n");
+                // Send the public key to the client after connection
+                char key_buffer[256];
+                snprintf(key_buffer, sizeof(key_buffer), "%lld,%lld", keys->public_key->modulus, keys->public_key->exponent);
+                if (send(client_fd, key_buffer, strlen(key_buffer), 0) == -1) {
+                    perror("Error sending public key");
+                    close(client_fd);
+                    client_fd = -1;
+                }
             }
         }
+        close(server_fd);
     }
-    close(server_fd);
+    else {
+        MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("Received message: %s\n", buffer);
+    }
+
+    MPI_Finalize();
     return 0;
 }
 

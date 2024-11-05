@@ -51,13 +51,13 @@ build cmake_object_order_depends_target_Server: phony || .
 
 build CMakeFiles/Server.dir/main.c.o: C_COMPILER__Server_unscanned_Debug /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/main.c || cmake_object_order_depends_target_Server
   DEP_FILE = CMakeFiles/Server.dir/main.c.o.d
-  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/Server.dir
   OBJECT_FILE_DIR = CMakeFiles/Server.dir
 
 build CMakeFiles/Server.dir/RSA/rsa.c.o: C_COMPILER__Server_unscanned_Debug /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/RSA/rsa.c || cmake_object_order_depends_target_Server
   DEP_FILE = CMakeFiles/Server.dir/RSA/rsa.c.o.d
-  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/Server.dir
   OBJECT_FILE_DIR = CMakeFiles/Server.dir/RSA
 

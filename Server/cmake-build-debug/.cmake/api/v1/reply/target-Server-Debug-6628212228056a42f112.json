@@ -35,18 +35,10 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu11 -fdiagnostics-color=always"
+					"fragment" : "-g -fdiagnostics-color=always"
 				}
 			],
 			"language" : "C",
-			"languageStandard" : 
-			{
-				"backtraces" : 
-				[
-					1
-				],
-				"standard" : "11"
-			},
 			"sourceIndexes" : 
 			[
 				0,

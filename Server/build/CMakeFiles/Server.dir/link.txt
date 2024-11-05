@@ -1,0 +1,1 @@
+mpicc CMakeFiles/Server.dir/main.c.o CMakeFiles/Server.dir/RSA/rsa.c.o -o Server 
