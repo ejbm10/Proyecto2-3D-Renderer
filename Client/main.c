@@ -57,7 +57,7 @@ int main(int argc, char const* argv[])
 
         scanf("%s", input_buffer);
 
-        if (strcmp(input_buffer, "exit") == 0 || strcmp(input_buffer, "shut") == 0) active = 0;
+        if (strcmp(input_buffer, "exit") == 0 || strcmp(input_buffer, "shutdown") == 0) active = 0;
 
         int blocks =(int) messageToASCII(input_buffer, -1, key);
 

@@ -70,13 +70,13 @@ int main(int argc, char const* argv[])
                 token = strtok(NULL, "|");
             }
 
-            if (strcmp(buffer, "exit") == 0) {
-                printf("Client disconnected!\n");
+            if (strcmp(final_msg, "exit") == 0) {
+                printf("Client disconnected!\n\n");
                 close(client_fd);
                 client_fd = -1;
             }
 
-            else if (strcmp(buffer, "shut") == 0) {
+            else if (strcmp(final_msg, "shutdown") == 0) {
                 printf("Shutting down...\n");
                 close(client_fd);
                 active = 0;
