@@ -54,6 +54,8 @@ int main(int argc, char const* argv[])
     struct RSAKeyPair *keys = generate_keys();
     printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
 
+    printf("Waiting for connection...\n");
+
     while (active) {
         if (client_fd > 0) {
             if (recv(client_fd, buffer, 1023, 0) < 0) {
@@ -61,8 +63,6 @@ int main(int argc, char const* argv[])
                 close(client_fd);
                 return -1;
             }
-
-            printf("Incoming: %s\n", buffer);
 
             char final_msg[1024] = { 0 };
             char* token = strtok(buffer, "|");
@@ -73,13 +73,13 @@ int main(int argc, char const* argv[])
             }
 
             if (strcmp(final_msg, "exit") == 0) {
-                printf("Client disconnected!\n\n");
+                printf("Client disconnected\n\n");
                 close(client_fd);
                 client_fd = -1;
             }
 
             else if (strcmp(final_msg, "shutdown") == 0) {
-                printf("Shutting down...\n");
+                printf("Server shutting down...\n");
                 close(client_fd);
                 active = 0;
             }
@@ -94,7 +94,7 @@ int main(int argc, char const* argv[])
             perror("Accept failed");
             return -1;
         } else {
-            printf("Client connected!\n\n");
+            printf("Client connected\n\n");
             // Send the public key to the client after connection
             char key_buffer[256];
             snprintf(key_buffer, sizeof(key_buffer), "%lld,%lld", keys->public_key->modulus, keys->public_key->exponent);
