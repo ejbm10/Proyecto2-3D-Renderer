@@ -25,7 +25,7 @@ int init_client() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
-    if (inet_pton(AF_INET, "192.168.0.19", &serv_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, "192.168.0.42", &serv_addr.sin_addr) <= 0) {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
     }
