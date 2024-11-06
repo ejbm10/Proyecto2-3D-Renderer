@@ -10,8 +10,6 @@
 
 #define PORT 8080
 
-char buffer[1024];
-
 int server_fd, client_fd;
 
 struct sockaddr_in address;
@@ -56,6 +54,9 @@ int main(int argc, char const* argv[])
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     if (my_rank == 0) {
+        
+        char buffer[1024];
+
         int active = 1;
         if (init_server() < 0) {
             return -1;
@@ -118,7 +119,10 @@ int main(int argc, char const* argv[])
         close(server_fd);
     }
     else {
+        char buffer[1024];
+
         MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
         printf("Received message: %s\n", buffer);
     }
 

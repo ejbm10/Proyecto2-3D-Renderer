@@ -77,8 +77,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/linux/posix_types.h \
   /usr/include/linux/stddef.h \
   /usr/include/netinet/in.h \
-  /usr/include/pthread.h \
-  /usr/include/sched.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
@@ -94,7 +92,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
   /usr/include/x86_64-linux-gnu/bits/byteswap.h \
   /usr/include/x86_64-linux-gnu/bits/confname.h \
-  /usr/include/x86_64-linux-gnu/bits/cpu-set.h \
   /usr/include/x86_64-linux-gnu/bits/endian.h \
   /usr/include/x86_64-linux-gnu/bits/endianness.h \
   /usr/include/x86_64-linux-gnu/bits/environments.h \
@@ -106,13 +103,9 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
-  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/sched.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
   /usr/include/x86_64-linux-gnu/bits/socket.h \
   /usr/include/x86_64-linux-gnu/bits/socket_type.h \
@@ -140,11 +133,9 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
@@ -158,19 +149,15 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+  /usr/include/x86_64-linux-gnu/mpi/mpi.h \
+  /usr/include/x86_64-linux-gnu/mpi/mpi_portable_platform.h \
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/sys/socket.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
-  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
-  /usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h \
-  /usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
 
-
-/usr/lib/x86_64-linux-gnu/openmpi/include/mpi_portable_platform.h:
-
-/usr/lib/x86_64-linux-gnu/openmpi/include/mpi.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
@@ -182,17 +169,11 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 
 /usr/include/x86_64-linux-gnu/bits/socket.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
-
-/usr/include/x86_64-linux-gnu/bits/sched.h:
-
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 
 /usr/include/x86_64-linux-gnu/bits/in.h:
 
 /usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/usr/include/x86_64-linux-gnu/bits/cpu-set.h:
 
 /usr/include/x86_64-linux-gnu/asm/posix_types_64.h:
 
@@ -203,10 +184,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 /usr/include/x86_64-linux-gnu/asm/bitsperlong.h:
 
 /usr/include/strings.h:
-
-/usr/include/sched.h:
-
-/usr/include/pthread.h:
 
 /usr/include/x86_64-linux-gnu/bits/socket_type.h:
 
@@ -219,8 +196,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 /usr/include/linux/posix_types.h:
 
 /usr/include/asm-generic/sockios.h:
-
-/usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
 /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/main.c:
 
@@ -272,11 +247,13 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
+/usr/include/x86_64-linux-gnu/mpi/mpi_portable_platform.h:
 
 /usr/include/asm-generic/socket.h:
 
 /usr/include/features-time64.h:
+
+/usr/include/x86_64-linux-gnu/mpi/mpi.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
@@ -313,8 +290,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
 
 /usr/include/stdc-predef.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
 
@@ -355,8 +330,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
 
