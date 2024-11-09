@@ -95,8 +95,9 @@ int main(int argc, char const* argv[])
                 }
 
                 else {
-                    printf("Client: %s\n", final_msg);
-                    MPI_Send(final_msg, strlen(final_msg) + 1, MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    printf("Compu %d client: %s\n", my_rank, final_msg);
+
+                    MPI_Bcast(final_msg, strlen(final_msg), MPI_CHAR, 0, MPI_COMM_WORLD);
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -121,8 +122,8 @@ int main(int argc, char const* argv[])
     else {
         char buffer[1024];
 
-        MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        
+        MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
+
         printf("Received message: %s\n", buffer);
     }
 
