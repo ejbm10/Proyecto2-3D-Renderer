@@ -10,32 +10,6 @@
 #include "Renderer/Renderer_alg.h"
 #include "GL/glut.h"
 
-int main(int argc, char** argv) {
-
-    const char* input = "pyramid -height=1.0&sphere -radius=1.0&cube -side=2.0";
-
-    parseInput(input);  // Parse the input string
-
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("3D Shapes: Cube, Pyramid, Cylinder");
-
-    glEnable(GL_DEPTH_TEST);
-
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutTimerFunc(0, timer, 0);
-
-    glutMainLoop();
-    return 0;
-
-
-
-}
-
-/**
 #define PORT 8080
 
 int server_fd, client_fd;
@@ -71,6 +45,48 @@ int init_server() {
     return 0;
 }
 
+int draw(int argc, char** argv, const char* input) {
+
+    //const char* input = "pyramid -height=1.0&sphere -radius=1.0&cube -side=2.0";
+
+    parseInput(input);  // Parse the input string
+
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("3D Shapes");
+
+    glEnable(GL_DEPTH_TEST);
+
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutTimerFunc(0, timer, 0);
+
+    glutMainLoop();
+    return 0;
+}
+
+int validate_syntax(char* final_msg) {
+    const char* commands[] = {"sphere", "cube", "cylinder", "cone", "pyramid", "prism"};
+
+    char* sub_instruction = strtok(final_msg, "&");
+
+    for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
+        if (strncmp(sub_instruction, commands[i], strlen(commands[i])) != 0) {
+            printf("\033[1;31mInvalid command. Options are:\n");
+            for (int j = 0; j < sizeof(commands) / sizeof(commands[0]); j++) {
+                printf("%s\n", commands[j]);
+            }
+            printf("\n\033[0m");
+            return 0;
+        }
+        sub_instruction = strtok(NULL, "&");
+    }
+
+    return 1;
+}
+
 int main(int argc, char const* argv[])
 {
     MPI_Init(&argc, &argv);
@@ -84,8 +100,6 @@ int main(int argc, char const* argv[])
     if (my_rank == 0) {
         
         char buffer[1024];
-
-        const char* commands[] = {"sphere", "cube", "cylinder", "cone", "pyramid", "prism"};
 
         int active = 1;
         if (init_server() < 0) {
@@ -125,25 +139,7 @@ int main(int argc, char const* argv[])
                 }
 
                 else {
-                    int valid = 0;
-
-                    for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
-                        if (strncmp(final_msg, commands[i], strlen(commands[i])) == 0) {
-                            valid = 1;
-                        }
-                    }
-
-                    if (valid) {
-                        printf("%s\n", final_msg);
-                        //MPI_Bcast(final_msg, strlen(final_msg), MPI_CHAR, 0, MPI_COMM_WORLD);
-                    }
-                    else {
-                        printf("\033[1;31mInvalid command. Options are:\n");
-                        for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
-                            printf("%s\n", commands[i]);
-                        }
-                        printf("\n\033[0m");
-                    }
+                    draw(argc, argv, final_msg);
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -185,5 +181,4 @@ int main(int argc, char const* argv[])
     MPI_Finalize();
     return 0;
 }
-**/
 

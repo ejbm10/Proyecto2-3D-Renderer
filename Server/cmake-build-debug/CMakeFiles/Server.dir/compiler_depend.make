@@ -65,6 +65,7 @@ CMakeFiles/Server.dir/RSA/rsa.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
 
 CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.c \
+  /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.h \
   /usr/include/GL/freeglut_std.h \
   /usr/include/GL/gl.h \
   /usr/include/GL/glext.h \
@@ -162,6 +163,7 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/features.h \
   /usr/include/linux/posix_types.h \
   /usr/include/linux/stddef.h \
+  /usr/include/math.h \
   /usr/include/netinet/in.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
@@ -184,11 +186,18 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
   /usr/include/x86_64-linux-gnu/bits/environments.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
   /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
   /usr/include/x86_64-linux-gnu/bits/in.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
@@ -335,6 +344,12 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
 
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
+
+/usr/include/x86_64-linux-gnu/bits/time.h:
+
+/usr/include/alloca.h:
+
 /usr/include/GL/freeglut_std.h:
 
 /usr/include/unistd.h:
@@ -441,12 +456,6 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
 
-/usr/include/x86_64-linux-gnu/bits/time.h:
-
-/usr/include/alloca.h:
-
-/usr/include/x86_64-linux-gnu/bits/math-vector.h:
-
 /usr/include/GL/gl.h:
 
 /usr/include/GL/glext.h:
@@ -459,9 +468,9 @@ CMakeFiles/Server.dir/main.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Ren
 
 /usr/include/string.h:
 
-/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.h:
-
 /usr/include/x86_64-linux-gnu/sys/select.h:
+
+/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.h:
 
 /usr/include/strings.h:
 
