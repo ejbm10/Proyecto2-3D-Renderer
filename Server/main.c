@@ -57,6 +57,8 @@ int main(int argc, char const* argv[])
         
         char buffer[1024];
 
+        const char* commands[] = {"sphere", "cube", "cylinder", "cone", "pyramid", "prism"};
+
         int active = 1;
         if (init_server() < 0) {
             return -1;
@@ -94,13 +96,26 @@ int main(int argc, char const* argv[])
                     active = 0;
                 }
 
-                else if (strcmp(final_msg, "circle") == 0) {
-                    printf("%s\n", final_msg);
-                    MPI_Bcast(final_msg, strlen(final_msg), MPI_CHAR, 0, MPI_COMM_WORLD);
-                }
-
                 else {
-                    perror("Invalid command.\nOptions are:\n 'circle'\n'triangle'\n'square'\n'cilinder'\n");
+                    int valid = 0;
+
+                    for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
+                        if (strncmp(final_msg, commands[i], strlen(commands[i])) == 0) {
+                            valid = 1;
+                        }
+                    }
+
+                    if (valid) {
+                        printf("%s\n", final_msg);
+                        //MPI_Bcast(final_msg, strlen(final_msg), MPI_CHAR, 0, MPI_COMM_WORLD);
+                    }
+                    else {
+                        printf("\033[1;31mInvalid command. Options are:\n");
+                        for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
+                            printf("%s\n", commands[i]);
+                        }
+                        printf("\n\033[0m");
+                    }
                 }
 
                 memset(buffer, 0, sizeof(buffer));
