@@ -15,7 +15,7 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename);
 void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const char *filename);
 void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename);
 void writePyramidToBinarySTL(GLfloat height, const char *filename);
-void writeCylinderToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename);
+void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename);
 void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat normal[3]);
 void writePrismToBinarySTL(float radius, float length, int n, const char *filename);
 void calculateNormal(float *v1, float *v2, float *v3, float *normal);

@@ -713,100 +713,122 @@ void drawPyramid(GLfloat height) {
     glEnd();
 }
 
-void writeTriangle(FILE *file, STLTriangle *triangle) {
-    fwrite(triangle, sizeof(STLTriangle), 1, file);
-}
-
-void calculateNormal(float *v1, float *v2, float *v3, float *normal) {
-    float u[3] = {v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]};
-    float v[3] = {v3[0] - v1[0], v3[1] - v1[1], v3[2] - v1[2]};
-    normal[0] = u[1] * v[2] - u[2] * v[1];
-    normal[1] = u[2] * v[0] - u[0] * v[2];
-    normal[2] = u[0] * v[1] - u[1] * v[0];
-    float length = sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
-    if (length != 0) {
-        normal[0] /= length;
-        normal[1] /= length;
-        normal[2] /= length;
-    }
-}
-
-void writeCylinderToBinarySTL(float radius, float height, int slices, const char *filename) {
+void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename) {
     FILE *file = fopen(filename, "wb");
     if (!file) {
-        fprintf(stderr, "Error: Cannot open file %s\n", filename);
+        printf("Error: Unable to open file for writing.\n");
         return;
     }
 
-    // Write 80-byte header
-    char header[80] = "Binary STL of Cylinder";
-    fwrite(header, 1, 80, file);
+    // Write the 80-byte header (can be any data, here we use zeros)
+    char header[80] = {0};
+    fwrite(header, sizeof(char), 80, file);
 
-    int numTriangles = slices * 4;
-    fwrite(&numTriangles, 4, 1, file);
+    // Calculate the number of triangles: 2*n (side triangles) + n (top) + n (bottom)
+    uint32_t numTriangles = n * 2 + n + n;
+    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
-    float angleStep = 2.0f * M_PI / slices;
-    for (int i = 0; i < slices; ++i) {
-        float angle1 = i * angleStep;
-        float angle2 = (i + 1) * angleStep;
+    // Angle increment for each side of the polygon
+    float angleIncrement = 2 * M_PI / n;
 
-        float x1 = radius * cos(angle1);
-        float y1 = radius * sin(angle1);
-        float x2 = radius * cos(angle2);
-        float y2 = radius * sin(angle2);
+    // Vertices for the prism
+    GLfloat topCenter[3] = {0.0f, 0.0f, length};   // Top center vertex
+    GLfloat bottomCenter[3] = {0.0f, 0.0f, 0.0f};  // Bottom center vertex
 
-        STLTriangle triangle = {0};
+    // Side faces (Each side face is composed of 2 triangles)
+    for (int i = 0; i < n; i++) {
+        // Calculate the angle for the current side
+        float angle1 = i * angleIncrement;
+        float angle2 = (i + 1) * angleIncrement;
 
-        // Side triangles (two per slice)
-        float top1[3] = {x1, y1, height / 2};
-        float top2[3] = {x2, y2, height / 2};
-        float bottom1[3] = {x1, y1, -height / 2};
-        float bottom2[3] = {x2, y2, -height / 2};
+        // Calculate the x, y coordinates for the vertices
+        GLfloat x1 = radius * cos(angle1);
+        GLfloat y1 = radius * sin(angle1);
+        GLfloat x2 = radius * cos(angle2);
+        GLfloat y2 = radius * sin(angle2);
 
-        // Triangle 1 (top1 -> top2 -> bottom1)
-        calculateNormal(top1, top2, bottom1, triangle.normal);
-        memcpy(triangle.vertices[0], top1, sizeof(top1));
-        memcpy(triangle.vertices[1], top2, sizeof(top2));
-        memcpy(triangle.vertices[2], bottom1, sizeof(bottom1));
-        writeTriangle(file, &triangle);
+        // Normal for the side faces (pointing outward)
+        GLfloat normal[3] = {0.0f, 0.0f, 1.0f}; // Normal pointing outwards
 
-        // Triangle 2 (top2 -> bottom2 -> bottom1)
-        calculateNormal(top2, bottom2, bottom1, triangle.normal);
-        memcpy(triangle.vertices[0], top2, sizeof(top2));
-        memcpy(triangle.vertices[1], bottom2, sizeof(bottom2));
-        memcpy(triangle.vertices[2], bottom1, sizeof(bottom1));
-        writeTriangle(file, &triangle);
+        // Side face triangles
+        GLfloat v1[3] = {x1, y1, 0.0f};
+        GLfloat v2[3] = {x1, y1, length};
+        GLfloat v3[3] = {x2, y2, length};
+        calculateNormalPrism(v1, v2, v3, normal);
+        fwrite(normal, sizeof(GLfloat), 3, file);
+        fwrite(&v1, sizeof(GLfloat), 3, file);
+        fwrite(&v2, sizeof(GLfloat), 3, file);
+        fwrite(&v3, sizeof(GLfloat), 3, file);
+        uint16_t attributeByteCount = 0;
+        fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
 
-        // Top cap triangle
-        STLTriangle topTriangle = {0};
-        float topCenter[3] = {0.0f, 0.0f, height / 2};
-        calculateNormal(top1, top2, topCenter, topTriangle.normal);
-        memcpy(topTriangle.vertices[0], top1, sizeof(top1));
-        memcpy(topTriangle.vertices[1], top2, sizeof(top2));
-        memcpy(topTriangle.vertices[2], topCenter, sizeof(topCenter));
-        writeTriangle(file, &topTriangle);
-
-        // Bottom cap triangle
-        STLTriangle bottomTriangle = {0};
-        float bottomCenter[3] = {0.0f, 0.0f, -height / 2};
-        calculateNormal(bottom2, bottom1, bottomCenter, bottomTriangle.normal);
-        memcpy(bottomTriangle.vertices[0], bottom2, sizeof(bottom2));
-        memcpy(bottomTriangle.vertices[1], bottom1, sizeof(bottom1));
-        memcpy(bottomTriangle.vertices[2], bottomCenter, sizeof(bottomCenter));
-        writeTriangle(file, &bottomTriangle);
+        GLfloat v4[3] = {x2, y2, 0.0f};
+        calculateNormalPrism(v1, v3, v4, normal);
+        fwrite(normal, sizeof(GLfloat), 3, file);
+        fwrite(&v1, sizeof(GLfloat), 3, file);
+        fwrite(&v3, sizeof(GLfloat), 3, file);
+        fwrite(&v4, sizeof(GLfloat), 3, file);
+        fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
     }
 
+    // Top face (n triangles)
+    for (int i = 0; i < n; i++) {
+        float angle1 = i * angleIncrement;
+        float angle2 = (i + 1) * angleIncrement;
+
+        // Calculate the x, y coordinates for the vertices
+        GLfloat x1 = radius * cos(angle1);
+        GLfloat y1 = radius * sin(angle1);
+        GLfloat x2 = radius * cos(angle2);
+        GLfloat y2 = radius * sin(angle2);
+
+        // Normal for the top face (pointing upwards)
+        GLfloat normal[3] = {0.0f, 0.0f, 1.0f}; // Normal pointing upwards
+
+        GLfloat v1[3] = {x1, y1, length};
+        GLfloat v2[3] = {x2, y2, length};
+        fwrite(normal, sizeof(GLfloat), 3, file);
+        fwrite(&topCenter, sizeof(GLfloat), 3, file);
+        fwrite(&v1, sizeof(GLfloat), 3, file);
+        fwrite(&v2, sizeof(GLfloat), 3, file);
+        uint16_t attributeByteCount = 0;
+        fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+    }
+
+    // Bottom face (n triangles)
+    for (int i = 0; i < n; i++) {
+        float angle1 = i * angleIncrement;
+        float angle2 = (i + 1) * angleIncrement;
+
+        // Calculate the x, y coordinates for the vertices
+        GLfloat x1 = radius * cos(angle1);
+        GLfloat y1 = radius * sin(angle1);
+        GLfloat x2 = radius * cos(angle2);
+        GLfloat y2 = radius * sin(angle2);
+
+        // Normal for the bottom face (pointing downwards)
+        GLfloat normal[3] = {0.0f, 0.0f, -1.0f}; // Normal pointing downwards
+
+        GLfloat v1[3] = {x1, y1, 0.0f};
+        GLfloat v2[3] = {x2, y2, 0.0f};
+        fwrite(normal, sizeof(GLfloat), 3, file);
+        fwrite(&bottomCenter, sizeof(GLfloat), 3, file);
+        fwrite(&v1, sizeof(GLfloat), 3, file);
+        fwrite(&v2, sizeof(GLfloat), 3, file);
+        uint16_t attributeByteCount = 0;
+        fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+    }
+
+    // Close the file
     fclose(file);
-    printf("Binary STL file %s generated successfully.\n", filename);
+    printf("Binary STL file has been written to %s\n", filename);
 }
-
-
 
 // Function to draw a cylinder with gradient color
 void drawCylinder(GLfloat radius, GLfloat height, GLint slices) {
 
     const char *filename = "cylinder_binary.stl";  // Output binary STL file
-    writeCylinderToBinarySTL(radius, height, slices, filename);
+    writeCylinderToBinarySTL(radius,height,360,filename);
 
     GLfloat angle;
     glBegin(GL_QUAD_STRIP);
@@ -1019,8 +1041,6 @@ void drawPrism(float radius, float length, int n) {
 
 
 
-
-
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -1096,7 +1116,7 @@ void reshape(int w, int h) {
 // Main function
 int main(int argc, char** argv) {
 
-    const char* input = "prism -radius=1.0 -length=1.5 -sides=6.0";
+    const char* input = "cylinder -radius=1.0 -height=2.0";
 
     parseInput(input);  // Parse the input string
     glutInit(&argc, argv);
