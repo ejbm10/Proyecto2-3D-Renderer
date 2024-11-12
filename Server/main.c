@@ -94,10 +94,13 @@ int main(int argc, char const* argv[])
                     active = 0;
                 }
 
-                else {
-                    printf("Compu %d client: %s\n", my_rank, final_msg);
-
+                else if (strcmp(final_msg, "circle") == 0) {
+                    printf("%s\n", final_msg);
                     MPI_Bcast(final_msg, strlen(final_msg), MPI_CHAR, 0, MPI_COMM_WORLD);
+                }
+
+                else {
+                    perror("Invalid command.\nOptions are:\n 'circle'\n'triangle'\n'square'\n'cilinder'\n");
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -120,11 +123,20 @@ int main(int argc, char const* argv[])
         close(server_fd);
     }
     else {
-        char buffer[1024];
 
-        MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
+        int active = 1;
 
-        printf("Received message: %s\n", buffer);
+        while (active) {
+            char buffer[1024];
+
+            MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
+
+            if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "shutdown") == 0) {
+                active = 0;
+            }
+
+            printf("Received message: %s\n", buffer);
+        }
     }
 
     MPI_Finalize();
