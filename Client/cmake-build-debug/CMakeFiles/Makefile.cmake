@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/CMakeLists.txt"
+  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/CMakeLists.txt"
   "CMakeFiles/3.29.6/CMakeCCompiler.cmake"
   "CMakeFiles/3.29.6/CMakeSystem.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/CMakeCInformation.cmake"
@@ -20,18 +20,11 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Compiler/GNU-C.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Compiler/GNU.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindGLEW.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindGLUT.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindOpenGL.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindPackageHandleStandardArgs.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindPackageMessage.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/FindPkgConfig.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Platform/Linux-GNU-C.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Platform/Linux-GNU.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Platform/Linux-Initialize.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Platform/Linux.cmake"
   "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/Platform/UnixPaths.cmake"
-  "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29/Modules/SelectLibraryConfigurations.cmake"
   )
 
 # The corresponding makefile is:
@@ -47,5 +40,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/Server.dir/DependInfo.cmake"
+  "CMakeFiles/Client.dir/DependInfo.cmake"
   )

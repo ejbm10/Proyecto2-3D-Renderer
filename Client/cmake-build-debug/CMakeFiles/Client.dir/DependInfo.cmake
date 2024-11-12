@@ -8,9 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/RSA/rsa.c" "CMakeFiles/Server.dir/RSA/rsa.c.o" "gcc" "CMakeFiles/Server.dir/RSA/rsa.c.o.d"
-  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.c" "CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o" "gcc" "CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o.d"
-  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/main.c" "CMakeFiles/Server.dir/main.c.o" "gcc" "CMakeFiles/Server.dir/main.c.o.d"
+  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/RSA/rsa.c" "CMakeFiles/Client.dir/RSA/rsa.c.o" "gcc" "CMakeFiles/Client.dir/RSA/rsa.c.o.d"
+  "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/main.c" "CMakeFiles/Client.dir/main.c.o" "gcc" "CMakeFiles/Client.dir/main.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

@@ -48,19 +48,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/michael-v/CLion2024/clion-2024.2.2/bin/cmake/linux/x64/bin/cmake
+CMAKE_COMMAND = /snap/clion/296/bin/cmake/linux/x64/bin/cmake
 
 # The command to remove a file.
-RM = /home/michael-v/CLion2024/clion-2024.2.2/bin/cmake/linux/x64/bin/cmake -E rm -f
+RM = /snap/clion/296/bin/cmake/linux/x64/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client
+CMAKE_SOURCE_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client
+CMAKE_BINARY_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	/home/michael-v/CLion2024/clion-2024.2.2/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/snap/clion/296/bin/cmake/linux/x64/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/home/michael-v/CLion2024/clion-2024.2.2/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/snap/clion/296/bin/cmake/linux/x64/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client/CMakeFiles /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/cmake-build-debug/CMakeFiles /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/michael-v/Documentos/SO/Proyecto2-3D-Renderer/Client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Client/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,29 +129,53 @@ Client/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/build
 .PHONY : Client/fast
 
-Renderer/Renderer_alg.o: Renderer/Renderer_alg.c.o
-.PHONY : Renderer/Renderer_alg.o
+RSA/rsa.o: RSA/rsa.c.o
+.PHONY : RSA/rsa.o
 
 # target to build an object file
-Renderer/Renderer_alg.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/Renderer/Renderer_alg.c.o
-.PHONY : Renderer/Renderer_alg.c.o
+RSA/rsa.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/RSA/rsa.c.o
+.PHONY : RSA/rsa.c.o
 
-Renderer/Renderer_alg.i: Renderer/Renderer_alg.c.i
-.PHONY : Renderer/Renderer_alg.i
+RSA/rsa.i: RSA/rsa.c.i
+.PHONY : RSA/rsa.i
 
 # target to preprocess a source file
-Renderer/Renderer_alg.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/Renderer/Renderer_alg.c.i
-.PHONY : Renderer/Renderer_alg.c.i
+RSA/rsa.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/RSA/rsa.c.i
+.PHONY : RSA/rsa.c.i
 
-Renderer/Renderer_alg.s: Renderer/Renderer_alg.c.s
-.PHONY : Renderer/Renderer_alg.s
+RSA/rsa.s: RSA/rsa.c.s
+.PHONY : RSA/rsa.s
 
 # target to generate assembly for a file
-Renderer/Renderer_alg.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/Renderer/Renderer_alg.c.s
-.PHONY : Renderer/Renderer_alg.c.s
+RSA/rsa.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/RSA/rsa.c.s
+.PHONY : RSA/rsa.c.s
+
+main.o: main.c.o
+.PHONY : main.o
+
+# target to build an object file
+main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/main.c.o
+.PHONY : main.c.o
+
+main.i: main.c.i
+.PHONY : main.i
+
+# target to preprocess a source file
+main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/main.c.i
+.PHONY : main.c.i
+
+main.s: main.c.s
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Client.dir/build.make CMakeFiles/Client.dir/main.c.s
+.PHONY : main.c.s
 
 # Help Target
 help:
@@ -162,9 +186,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Client"
-	@echo "... Renderer/Renderer_alg.o"
-	@echo "... Renderer/Renderer_alg.i"
-	@echo "... Renderer/Renderer_alg.s"
+	@echo "... RSA/rsa.o"
+	@echo "... RSA/rsa.i"
+	@echo "... RSA/rsa.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

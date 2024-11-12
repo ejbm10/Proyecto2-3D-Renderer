@@ -153,6 +153,30 @@ RSA/rsa.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/RSA/rsa.c.s
 .PHONY : RSA/rsa.c.s
 
+Renderer/Renderer_alg.o: Renderer/Renderer_alg.c.o
+.PHONY : Renderer/Renderer_alg.o
+
+# target to build an object file
+Renderer/Renderer_alg.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o
+.PHONY : Renderer/Renderer_alg.c.o
+
+Renderer/Renderer_alg.i: Renderer/Renderer_alg.c.i
+.PHONY : Renderer/Renderer_alg.i
+
+# target to preprocess a source file
+Renderer/Renderer_alg.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.i
+.PHONY : Renderer/Renderer_alg.c.i
+
+Renderer/Renderer_alg.s: Renderer/Renderer_alg.c.s
+.PHONY : Renderer/Renderer_alg.s
+
+# target to generate assembly for a file
+Renderer/Renderer_alg.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
+.PHONY : Renderer/Renderer_alg.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... RSA/rsa.o"
 	@echo "... RSA/rsa.i"
 	@echo "... RSA/rsa.s"
+	@echo "... Renderer/Renderer_alg.o"
+	@echo "... Renderer/Renderer_alg.i"
+	@echo "... Renderer/Renderer_alg.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

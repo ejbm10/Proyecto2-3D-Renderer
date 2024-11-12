@@ -7,7 +7,35 @@
 #include "RSA/rsa.h"
 #include <mpi/mpi.h>
 #include <time.h>
+#include "Renderer/Renderer_alg.h"
+#include "GL/glut.h"
 
+int main(int argc, char** argv) {
+
+    const char* input = "pyramid -height=1.0&sphere -radius=1.0&cube -side=2.0";
+
+    parseInput(input);  // Parse the input string
+
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("3D Shapes: Cube, Pyramid, Cylinder");
+
+    glEnable(GL_DEPTH_TEST);
+
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutTimerFunc(0, timer, 0);
+
+    glutMainLoop();
+    return 0;
+
+
+
+}
+
+/**
 #define PORT 8080
 
 int server_fd, client_fd;
@@ -157,4 +185,5 @@ int main(int argc, char const* argv[])
     MPI_Finalize();
     return 0;
 }
+**/
 

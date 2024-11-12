@@ -1,13 +1,6 @@
-#include <GL/glut.h>
-#include <math.h>
-#include <GL/glu.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include "Renderer_alg.h"
 
 #define MAX_SHAPES 10
-
-
 
 // Angles for rotation
 GLfloat cubeAngle = 0.0f;
@@ -517,30 +510,4 @@ void reshape(int w, int h) {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-}
-
-// Main function
-int main(int argc, char** argv) {
-
-    const char* input = "pyramid -height=1.0&sphere -radius=1.0&cube -side=2.0";
-
-    parseInput(input);  // Parse the input string
-
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("3D Shapes: Cube, Pyramid, Cylinder");
-
-    glEnable(GL_DEPTH_TEST);
-
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutTimerFunc(0, timer, 0);
-
-    glutMainLoop();
-    return 0;
-
-
-
 }
