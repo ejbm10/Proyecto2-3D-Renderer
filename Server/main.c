@@ -122,7 +122,7 @@ int main(int argc, char const* argv[])
                 }
 
                 else if (validate_instruction(final_msg)) {
-                    printf("Node %d: Validated message. Sending", my_rank);
+                    printf("Node %d sent: %s\n", my_rank, buffer);
                     MPI_Send(buffer, strlen(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
@@ -146,28 +146,11 @@ int main(int argc, char const* argv[])
         close(server_fd);
     }
     else {
+        char buffer[1024];
 
-        int active = 1;
+        MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        while (active) {
-            char buffer[1024];
-
-            MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            char final_msg[1024] = { 0 };
-            char* token = strtok(buffer, "|");
-
-            while (token != NULL) {
-                strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
-                token = strtok(NULL, "|");
-            }
-
-            if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "shutdown") == 0) {
-                active = 0;
-            }
-
-            printf("Node %d: %s\n", my_rank, buffer);
-        }
+        printf("Node %d received: %s\n", my_rank, buffer);
     }
 
     MPI_Finalize();
