@@ -9,6 +9,7 @@
 #include <time.h>
 #include "Renderer/Renderer_alg.h"
 #include "GL/glut.h"
+#include "Validation/syntax.h"
 
 #define PORT 8080
 
@@ -73,7 +74,7 @@ int validate_syntax(char* final_msg) {
     char* sub_instruction = strtok(final_msg, "&");
 
     for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
-        if (strncmp(sub_instruction, commands[i], strlen(commands[i])) != 0) {
+        if (strncmp(sub_instruction, commands[i], strlen(commands[i])) == 0) {
             printf("\033[1;31mInvalid command. Options are:\n");
             for (int j = 0; j < sizeof(commands) / sizeof(commands[0]); j++) {
                 printf("%s\n", commands[j]);
@@ -138,7 +139,7 @@ int main(int argc, char const* argv[])
                     active = 0;
                 }
 
-                else {
+                else if (validate_instruction(final_msg)) {
                     draw(argc, argv, final_msg);
                 }
 

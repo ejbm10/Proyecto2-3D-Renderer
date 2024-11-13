@@ -177,6 +177,30 @@ Renderer/Renderer_alg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
 .PHONY : Renderer/Renderer_alg.c.s
 
+Validation/syntax.o: Validation/syntax.c.o
+.PHONY : Validation/syntax.o
+
+# target to build an object file
+Validation/syntax.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.o
+.PHONY : Validation/syntax.c.o
+
+Validation/syntax.i: Validation/syntax.c.i
+.PHONY : Validation/syntax.i
+
+# target to preprocess a source file
+Validation/syntax.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.i
+.PHONY : Validation/syntax.c.i
+
+Validation/syntax.s: Validation/syntax.c.s
+.PHONY : Validation/syntax.s
+
+# target to generate assembly for a file
+Validation/syntax.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.s
+.PHONY : Validation/syntax.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... Renderer/Renderer_alg.o"
 	@echo "... Renderer/Renderer_alg.i"
 	@echo "... Renderer/Renderer_alg.s"
+	@echo "... Validation/syntax.o"
+	@echo "... Validation/syntax.i"
+	@echo "... Validation/syntax.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
