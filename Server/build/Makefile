@@ -153,6 +153,54 @@ RSA/rsa.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/RSA/rsa.c.s
 .PHONY : RSA/rsa.c.s
 
+Renderer/Renderer_alg.o: Renderer/Renderer_alg.c.o
+.PHONY : Renderer/Renderer_alg.o
+
+# target to build an object file
+Renderer/Renderer_alg.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o
+.PHONY : Renderer/Renderer_alg.c.o
+
+Renderer/Renderer_alg.i: Renderer/Renderer_alg.c.i
+.PHONY : Renderer/Renderer_alg.i
+
+# target to preprocess a source file
+Renderer/Renderer_alg.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.i
+.PHONY : Renderer/Renderer_alg.c.i
+
+Renderer/Renderer_alg.s: Renderer/Renderer_alg.c.s
+.PHONY : Renderer/Renderer_alg.s
+
+# target to generate assembly for a file
+Renderer/Renderer_alg.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
+.PHONY : Renderer/Renderer_alg.c.s
+
+Validation/syntax.o: Validation/syntax.c.o
+.PHONY : Validation/syntax.o
+
+# target to build an object file
+Validation/syntax.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.o
+.PHONY : Validation/syntax.c.o
+
+Validation/syntax.i: Validation/syntax.c.i
+.PHONY : Validation/syntax.i
+
+# target to preprocess a source file
+Validation/syntax.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.i
+.PHONY : Validation/syntax.c.i
+
+Validation/syntax.s: Validation/syntax.c.s
+.PHONY : Validation/syntax.s
+
+# target to generate assembly for a file
+Validation/syntax.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.s
+.PHONY : Validation/syntax.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -189,6 +237,12 @@ help:
 	@echo "... RSA/rsa.o"
 	@echo "... RSA/rsa.i"
 	@echo "... RSA/rsa.s"
+	@echo "... Renderer/Renderer_alg.o"
+	@echo "... Renderer/Renderer_alg.i"
+	@echo "... Renderer/Renderer_alg.s"
+	@echo "... Validation/syntax.o"
+	@echo "... Validation/syntax.i"
+	@echo "... Validation/syntax.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
