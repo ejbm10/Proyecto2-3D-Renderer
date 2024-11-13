@@ -139,9 +139,6 @@ int validate_params(char* buffer) {
         }
     }
 
-    printf("%s\n", parameters[0]);
-    printf("%d\n", count);
-
     // Verify number of params greater than 1 for sphere, cube and pyramid
     if ((strcmp(parameters[0], "sphere") == 0 || strcmp(parameters[0], "cube") == 0 || strcmp(parameters[0], "pyramid") == 0) && count - 1 != 1) {
         printf("\033[1;31m%s %s", parameters[0], errorMessages[4]);

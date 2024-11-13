@@ -102,12 +102,12 @@ int main(int argc, char const* argv[])
                 }
 
                 char final_msg[1024] = { 0 };
-                char* token = strtok(buffer, "|");
-
-                while (token != NULL) {
-                    strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
-                    token = strtok(NULL, "|");
+                int count;
+                char **substrings = split_string(buffer, '|', &count);
+                for (int i = 0; i < count; i++) {
+                    strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(substrings[i], NULL, 10), keys->private_key)));
                 }
+                free_split_string(substrings, count);
 
                 if (strcmp(final_msg, "exit") == 0) {
                     printf("Client disconnected\n\n");
@@ -119,11 +119,12 @@ int main(int argc, char const* argv[])
                     printf("Server shutting down...\n");
                     close(client_fd);
                     active = 0;
+                    MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
                 else if (validate_instruction(final_msg)) {
                     printf("Node %d sent: %s\n", my_rank, buffer);
-                    MPI_Send(buffer, strlen(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -146,11 +147,26 @@ int main(int argc, char const* argv[])
         close(server_fd);
     }
     else {
-        char buffer[1024];
+        int active = 1;
 
-        MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        while (active) {
+            const char buffer[1024];
+            MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        printf("Node %d received: %s\n", my_rank, buffer);
+            char final_msg[1024] = { 0 };
+            int count;
+            char **substrings = split_string(buffer, '|', &count);
+            for (int i = 0; i < count; i++) {
+                strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(substrings[i], NULL, 10), keys->private_key)));
+            }
+            free_split_string(substrings, count);
+
+            if (strcmp(final_msg, "shutdown") == 0) active = 0;
+            else {
+                printf("Node %d received: %s\n", my_rank, final_msg);
+                draw(argc, argv, final_msg);
+            }
+        }
     }
 
     MPI_Finalize();
