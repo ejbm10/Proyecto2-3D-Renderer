@@ -68,26 +68,6 @@ int draw(int argc, char** argv, const char* input) {
     return 0;
 }
 
-int validate_syntax(char* final_msg) {
-    const char* commands[] = {"sphere", "cube", "cylinder", "cone", "pyramid", "prism"};
-
-    char* sub_instruction = strtok(final_msg, "&");
-
-    for (int i = 0; i < sizeof(commands) / sizeof(commands[0]); i++) {
-        if (strncmp(sub_instruction, commands[i], strlen(commands[i])) == 0) {
-            printf("\033[1;31mInvalid command. Options are:\n");
-            for (int j = 0; j < sizeof(commands) / sizeof(commands[0]); j++) {
-                printf("%s\n", commands[j]);
-            }
-            printf("\n\033[0m");
-            return 0;
-        }
-        sub_instruction = strtok(NULL, "&");
-    }
-
-    return 1;
-}
-
 int main(int argc, char const* argv[])
 {
     MPI_Init(&argc, &argv);
@@ -98,6 +78,8 @@ int main(int argc, char const* argv[])
 
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
+    struct RSAKeyPair *keys = generate_keys();
+
     if (my_rank == 0) {
         
         char buffer[1024];
@@ -106,7 +88,7 @@ int main(int argc, char const* argv[])
         if (init_server() < 0) {
             return -1;
         }
-        struct RSAKeyPair *keys = generate_keys();
+
         printf("Public key: (%lld, %lld)\nPrivate key: (%lld, %lld)\n\n", keys->public_key->modulus, keys->public_key->exponent, keys->private_key->modulus, keys->private_key->exponent);
 
         printf("Waiting for connection...\n");
@@ -140,7 +122,8 @@ int main(int argc, char const* argv[])
                 }
 
                 else if (validate_instruction(final_msg)) {
-                    draw(argc, argv, final_msg);
+                    printf("Node %d: Validated message. Sending", my_rank);
+                    MPI_Send(buffer, strlen(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -169,13 +152,21 @@ int main(int argc, char const* argv[])
         while (active) {
             char buffer[1024];
 
-            MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
+            MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            char final_msg[1024] = { 0 };
+            char* token = strtok(buffer, "|");
+
+            while (token != NULL) {
+                strcat(final_msg, ASCIIToMessage(rsa_decrypt(strtoull(token, NULL, 10), keys->private_key)));
+                token = strtok(NULL, "|");
+            }
 
             if (strcmp(buffer, "exit") == 0 || strcmp(buffer, "shutdown") == 0) {
                 active = 0;
             }
 
-            printf("Received message: %s\n", buffer);
+            printf("Node %d: %s\n", my_rank, buffer);
         }
     }
 
