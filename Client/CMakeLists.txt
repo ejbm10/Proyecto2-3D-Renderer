@@ -17,6 +17,10 @@ add_executable(Client
         Renderer/Renderer_alg.c
         Renderer/stb_image.h
         Renderer/Renderer_alg.h
+        Renderer/STL_file_handler.c
+        Renderer/STL_file_handler.h
+        Renderer/STL_to_h_converter.c
+        Renderer/STL_to_h_converter.h
 )
 
 # Link the libraries, including GLFW directly
