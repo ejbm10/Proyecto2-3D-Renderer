@@ -419,6 +419,7 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
+    stl_to_h_file(filename);
     //mergeSTLFiles();
 }
 
@@ -538,6 +539,7 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
+    stl_to_h_file(filename);
     //mergeSTLFiles();
 }
 
@@ -681,6 +683,7 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
+    stl_to_h_file(filename);
     //mergeSTLFiles();
 }
 
@@ -829,6 +832,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     // Close the file
     fclose(file);
     printf("Binary STL file has been written to %s\n", filename);
+    stl_to_h_file(filename);
     //mergeSTLFiles();
 }
 
@@ -1000,6 +1004,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     // Close the file
     fclose(file);
     printf("Binary STL file has been written to %s\n", filename);
+    stl_to_h_file(filename);
 
     //mergeSTLFiles();
 
