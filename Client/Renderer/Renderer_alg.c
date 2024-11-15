@@ -419,7 +419,7 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
-    mergeSTLFiles();
+    //mergeSTLFiles();
 }
 
 // Function to draw a cone with a gradient color
@@ -538,7 +538,7 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
-    mergeSTLFiles();
+    //mergeSTLFiles();
 }
 
 
@@ -681,7 +681,7 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     fclose(file);
 
     printf("Binary STL file has been written to %s\n", filename);
-    mergeSTLFiles();
+    //mergeSTLFiles();
 }
 
 
@@ -829,7 +829,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     // Close the file
     fclose(file);
     printf("Binary STL file has been written to %s\n", filename);
-    mergeSTLFiles();
+    //mergeSTLFiles();
 }
 
 // Function to draw a cylinder with gradient color
@@ -1001,7 +1001,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     fclose(file);
     printf("Binary STL file has been written to %s\n", filename);
 
-    mergeSTLFiles();
+    //mergeSTLFiles();
 
 
 
@@ -1127,47 +1127,26 @@ void reshape(int w, int h) {
     glLoadIdentity();
 }
 
-void mergeSTLFiles() {
-    const char *directory = "Resources";  // Directory to scan for STL files
-    char **fileList = NULL;
-    int numFiles = listSTLFiles(directory, &fileList);
-
-    if (numFiles == 0) {
-        printf("No STL files found in the directory %s\n", directory);
-
-    }
-
-    // Output file path
-    const char *outputFile = "Resources/combined_output.stl";
-
-    // Combine the STL files
-    combineMultipleBinarySTL(outputFile, fileList, numFiles);
-
-    // Free the file list memory
-    for (int i = 0; i < numFiles; i++) {
-        free(fileList[i]);
-    }
-    free(fileList);
-}
 
 void stl_to_h_file(const char *filePath) {
-    MeshData* mesh = readStl(filePath, true);
-    if (mesh) {
-        scaleMesh(mesh);
-        //createEdges(mesh);
-        char* result = meshToText(mesh, 4, true, true, true, "shapes");
-        printf("%s", result);
-        free(result);
-        // Free mesh data
-    }
-    //printf("Header file '%s' generated successfully.\n", "shapes.h");
+
+    Mesh mesh = readStl(filePath);
+    scaleMesh(&mesh);
+    writeHeaderFile(&mesh, "shapes.h");
+
+    free(mesh.vertices);
+    free(mesh.triangles);
+    free(mesh.normals);
+
+    printf("Header file '%s' generated successfully.\n", "shapes.h");
+
 }
 
 // Main function
 int main(int argc, char** argv) {
 
 
-    /**
+
     const char* input = "sphere -radius=0.5";
 
     parseInput(input);  // Parse the input string
@@ -1183,8 +1162,10 @@ int main(int argc, char** argv) {
     glutTimerFunc(0, timer, 0);
 
     glutMainLoop();
-    */
-    stl_to_h_file("Resources/sphere_binary.stl");
+
+    //stl_to_h_file("Resources/pyramid_binary.stl");
+
+
 
     return 0;
 

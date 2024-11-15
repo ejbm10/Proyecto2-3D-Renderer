@@ -19,103 +19,53 @@
 #include <stdint.h>
 #include <unistd.h>
 
-// Function to list all STL files in a directory
-int listSTLFiles(const char *directory, char ***fileList) {
-    DIR *dir = opendir(directory);
-    if (!dir) {
-        printf("Error opening directory %s\n", directory);
-        return 0;
+
+// Function to load STL file in binary format
+int load_stl(const char *filename, Triangle_ **triangles, unsigned int *triangle_count) {
+    FILE *file = fopen(filename, "rb");
+    if (!file) {
+        perror("Failed to open file");
+        return 1;
     }
 
-    struct dirent *entry;
-    int fileCount = 0;
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG && strstr(entry->d_name, ".stl")) {
-            printf("file name: ", entry->d_name);
-            (*fileList) = realloc(*fileList, sizeof(char *) * (fileCount + 1));
-            (*fileList)[fileCount] = malloc(strlen(directory) + strlen(entry->d_name) + 2);
-            sprintf((*fileList)[fileCount], "%s/%s", directory, entry->d_name);
-            fileCount++;
-        }
-    }
-    closedir(dir);
-    return fileCount;
+    fseek(file, STL_HEADER_SIZE, SEEK_SET);  // Skip the header
+    fread(triangle_count, sizeof(unsigned int), 1, file);
+
+    *triangles = malloc(*triangle_count * sizeof(Triangle_));
+    fread(*triangles, STL_TRIANGLE_SIZE, *triangle_count, file);
+    fclose(file);
+
+    return 0;
 }
 
+// Function to offset triangles to avoid overlap
+void offset_triangles(Triangle_ *triangles, unsigned int count, float x_offset, float y_offset, float z_offset) {
+    for (unsigned int i = 0; i < count; ++i) {
+        for (int v = 0; v < 3; ++v) {  // Each vertex of the triangle
+            triangles[i].vertices[v][0] += x_offset;
+            triangles[i].vertices[v][1] += y_offset;
+            triangles[i].vertices[v][2] += z_offset;
+        }
+    }
+}
 
-
-// Function to combine multiple binary STL files
-void combineMultipleBinarySTL(const char *outputFile, char **inputFiles, int numFiles) {
-    FILE *out = fopen(outputFile, "wb");
-    if (!out) {
-        printf("Error opening output file.\n");
+// Function to write the merged STL file
+void write_combined_stl(const char *filename, Triangle_ *all_triangles, unsigned int total_triangle_count) {
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        perror("Failed to open output file");
         return;
     }
 
-    uint32_t totalTriangles = 0;
-    uint8_t triangleBuffer[50];  // Each triangle is 50 bytes
+    char header[STL_HEADER_SIZE] = {0};
+    fwrite(header, STL_HEADER_SIZE, 1, file);  // Write header
 
-    // Iterate over all input files to count the triangles and read their data
-    for (int i = 0; i < numFiles; ++i) {
-        FILE *f = fopen(inputFiles[i], "rb");
-        if (!f) {
-            printf("Error opening file: %s\n", inputFiles[i]);
-            continue;
-        }
+    fwrite(&total_triangle_count, sizeof(unsigned int), 1, file);  // Number of triangles
+    fwrite(all_triangles, STL_TRIANGLE_SIZE, total_triangle_count, file);
 
-        // Read the header and number of triangles from the current file
-        char header[80];
-        uint32_t numTriangles;
-
-        // Read the header (80 bytes) - we skip it for now, we will overwrite it later
-        fread(header, sizeof(char), 80, f);
-
-        // Read the number of triangles from the file
-        fread(&numTriangles, sizeof(uint32_t), 1, f);
-
-        // Update the total number of triangles
-        totalTriangles += numTriangles;
-
-        // Skip the triangles to move to the next file
-        fseek(f, numTriangles * 50, SEEK_CUR);
-
-        fclose(f);
-    }
-
-    // Write the header to the output file (we will use an empty header or a constant one)
-    char newHeader[80] = {0};  // Empty header or set a custom one
-    fwrite(newHeader, sizeof(char), 80, out);
-
-    // Write the total number of triangles to the output file
-    fwrite(&totalTriangles, sizeof(uint32_t), 1, out);
-
-    // Now write the triangles from each file
-    for (int i = 0; i < numFiles; ++i) {
-        FILE *f = fopen(inputFiles[i], "rb");
-        if (!f) {
-            continue;
-        }
-
-        // Skip the header (80 bytes) and the number of triangles (4 bytes)
-        fseek(f, 84, SEEK_SET);
-
-        // Read and write the triangles
-        uint32_t numTriangles;
-        fread(&numTriangles, sizeof(uint32_t), 1, f);
-
-        // Write each triangle to the combined file
-        for (uint32_t j = 0; j < numTriangles; ++j) {
-            fread(triangleBuffer, sizeof(uint8_t), 50, f);  // Read 50 bytes per triangle
-            fwrite(triangleBuffer, sizeof(uint8_t), 50, out);  // Write to the combined file
-        }
-
-        fclose(f);
-    }
-
-    // Close the output file
-    fclose(out);
-
-    printf("Successfully combined %d binary STL files into %s\n", numFiles, outputFile);
+    fclose(file);
 }
+
+
 
 
