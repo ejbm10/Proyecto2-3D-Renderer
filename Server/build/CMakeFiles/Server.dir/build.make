@@ -111,10 +111,38 @@ CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s"
 	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.c -o CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
 
+CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o: CMakeFiles/Server.dir/flags.make
+CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_file_handler.c
+CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o: CMakeFiles/Server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o -MF CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o.d -o CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o -c /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_file_handler.c
+
+CMakeFiles/Server.dir/Renderer/STL_file_handler.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Server.dir/Renderer/STL_file_handler.c.i"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_file_handler.c > CMakeFiles/Server.dir/Renderer/STL_file_handler.c.i
+
+CMakeFiles/Server.dir/Renderer/STL_file_handler.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Server.dir/Renderer/STL_file_handler.c.s"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_file_handler.c -o CMakeFiles/Server.dir/Renderer/STL_file_handler.c.s
+
+CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o: CMakeFiles/Server.dir/flags.make
+CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_to_h_converter.c
+CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o: CMakeFiles/Server.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o -MF CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o.d -o CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o -c /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_to_h_converter.c
+
+CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.i"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_to_h_converter.c > CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.i
+
+CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.s"
+	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_to_h_converter.c -o CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.s
+
 CMakeFiles/Server.dir/Validation/syntax.c.o: CMakeFiles/Server.dir/flags.make
 CMakeFiles/Server.dir/Validation/syntax.c.o: /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Validation/syntax.c
 CMakeFiles/Server.dir/Validation/syntax.c.o: CMakeFiles/Server.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/Server.dir/Validation/syntax.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/Server.dir/Validation/syntax.c.o"
 	mpicc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/Server.dir/Validation/syntax.c.o -MF CMakeFiles/Server.dir/Validation/syntax.c.o.d -o CMakeFiles/Server.dir/Validation/syntax.c.o -c /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Validation/syntax.c
 
 CMakeFiles/Server.dir/Validation/syntax.c.i: cmake_force
@@ -130,6 +158,8 @@ Server_OBJECTS = \
 "CMakeFiles/Server.dir/main.c.o" \
 "CMakeFiles/Server.dir/RSA/rsa.c.o" \
 "CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o" \
+"CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o" \
+"CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o" \
 "CMakeFiles/Server.dir/Validation/syntax.c.o"
 
 # External object files for target Server
@@ -138,6 +168,8 @@ Server_EXTERNAL_OBJECTS =
 Server: CMakeFiles/Server.dir/main.c.o
 Server: CMakeFiles/Server.dir/RSA/rsa.c.o
 Server: CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o
+Server: CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o
+Server: CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o
 Server: CMakeFiles/Server.dir/Validation/syntax.c.o
 Server: CMakeFiles/Server.dir/build.make
 Server: /usr/lib/x86_64-linux-gnu/libGLEW.so
@@ -147,7 +179,7 @@ Server: /usr/lib/x86_64-linux-gnu/libGLU.so
 Server: /usr/lib/x86_64-linux-gnu/libglut.so
 Server: /usr/lib/x86_64-linux-gnu/libXi.so
 Server: CMakeFiles/Server.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable Server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable Server"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Server.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

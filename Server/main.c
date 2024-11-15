@@ -46,28 +46,6 @@ int init_server() {
     return 0;
 }
 
-int draw(int argc, char** argv, const char* input) {
-
-    //const char* input = "pyramid -height=1.0&sphere -radius=1.0&cube -side=2.0";
-
-    parseInput(input);  // Parse the input string
-
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("3D Shapes");
-
-    glEnable(GL_DEPTH_TEST);
-
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutTimerFunc(0, timer, 0);
-
-    glutMainLoop();
-    return 0;
-}
-
 int main(int argc, char const* argv[])
 {
     MPI_Init(&argc, &argv);
@@ -119,12 +97,15 @@ int main(int argc, char const* argv[])
                     printf("Server shutting down...\n");
                     close(client_fd);
                     active = 0;
-                    MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    //MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
                 else if (validate_instruction(final_msg)) {
                     printf("Node %d sent: %s\n", my_rank, buffer);
-                    MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+
+                    process_STL(argc, argv, final_msg);
+
+                    //MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
                 }
 
                 memset(buffer, 0, sizeof(buffer));
@@ -164,7 +145,6 @@ int main(int argc, char const* argv[])
             if (strcmp(final_msg, "shutdown") == 0) active = 0;
             else {
                 printf("Node %d received: %s\n", my_rank, final_msg);
-                draw(argc, argv, final_msg);
             }
         }
     }

@@ -34,6 +34,6 @@ void display();
 void timer(int value);
 void reshape(int w, int h);
 void stl_to_h_file(const char *filePath);
-int main(int argc, char** argv);
+void process_STL(int argc, char** argv, const char* input);
 
 #endif //RENDERER_ALG_H

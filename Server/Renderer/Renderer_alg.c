@@ -274,7 +274,7 @@ void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const ch
 
 void drawSphere(GLfloat radius, GLint slices, GLint stacks) {
 
-    const char *filename = "Resources/sphere_binary.stl";  // Output binary STL file
+    const char *filename = "../Resources/binary.stl";  // Output binary STL file
     writeSphereToBinarySTL(1.0, slices, stacks, filename);
     GLUquadric *quad = gluNewQuadric();
 
@@ -421,7 +421,7 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
 // Function to draw a cone with a gradient color
 void drawCone(GLfloat radius, GLfloat height, GLint slices) {
 
-    const char *filename = "Resources/cone_binary.stl";  // Output binary STL file
+    const char *filename = "../Resources/binary.stl";  // Output binary STL file
     writeConeToBinarySTL(radius, height, slices, filename);
     GLfloat halfHeight = height / 2.0f;
 
@@ -583,7 +583,7 @@ void drawCube(GLfloat sideLength) {
     glVertex3f( sideLength/2, -sideLength/2,  sideLength/2);
     glVertex3f(-sideLength/2, -sideLength/2,  sideLength/2);
 
-    const char *filename = "Resources/cube_binary.stl";  // Output STL file
+    const char *filename = "../Resources/binary.stl";  // Output STL file
     writeCubeToBinarySTL(sideLength, filename);
 
     glEnd();
@@ -681,7 +681,7 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
 // Function to draw a pyramid
 void drawPyramid(GLfloat height) {
 
-    const char *filename = "Resources/pyramid_binary.stl";  // Output binary STL file
+    const char *filename = "../Resources/binary.stl";  // Output binary STL file
     writePyramidToBinarySTL(height, filename);
     glBegin(GL_TRIANGLES);
 
@@ -828,7 +828,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
 // Function to draw a cylinder with gradient color
 void drawCylinder(GLfloat radius, GLfloat height, GLint slices) {
 
-    const char *filename = "Resources/cylinder_binary.stl";  // Output binary STL file
+    const char *filename = "../Resources/binary.stl";  // Output binary STL file
     writeCylinderToBinarySTL(radius,height,360,filename);
 
     GLfloat angle;
@@ -999,7 +999,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
 }
 
 void drawPrism(float radius, float length, int n) {
-    const char *filename = "Resources/prism_binary.stl";  // Output binary STL file
+    const char *filename = "../Resources/binary.stl";  // Output binary STL file
     writePrismToBinarySTL(radius, length, n, filename);
     // Angle increment for each side of the cylinder
     float angleIncrement = 2 * M_PI / n;
@@ -1126,9 +1126,7 @@ void stl_to_h_file(const char *filePath) {
 }
 
 // Main function
-int main(int argc, char** argv) {
-    const char* input = "sphere -radius=0.5";
-
+void process_STL(int argc, char** argv, const char* input) {
     parseInput(input);  // Parse the input string
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -1142,7 +1140,4 @@ int main(int argc, char** argv) {
     glutTimerFunc(0, timer, 0);
 
     glutMainLoop();
-
-    //stl_to_h_file("Resources/pyramid_binary.stl");
-    return 0;
 }
