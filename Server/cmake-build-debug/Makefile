@@ -177,6 +177,54 @@ Renderer/Renderer_alg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
 .PHONY : Renderer/Renderer_alg.c.s
 
+Renderer/STL_file_handler.o: Renderer/STL_file_handler.c.o
+.PHONY : Renderer/STL_file_handler.o
+
+# target to build an object file
+Renderer/STL_file_handler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o
+.PHONY : Renderer/STL_file_handler.c.o
+
+Renderer/STL_file_handler.i: Renderer/STL_file_handler.c.i
+.PHONY : Renderer/STL_file_handler.i
+
+# target to preprocess a source file
+Renderer/STL_file_handler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.i
+.PHONY : Renderer/STL_file_handler.c.i
+
+Renderer/STL_file_handler.s: Renderer/STL_file_handler.c.s
+.PHONY : Renderer/STL_file_handler.s
+
+# target to generate assembly for a file
+Renderer/STL_file_handler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.s
+.PHONY : Renderer/STL_file_handler.c.s
+
+Renderer/STL_to_h_converter.o: Renderer/STL_to_h_converter.c.o
+.PHONY : Renderer/STL_to_h_converter.o
+
+# target to build an object file
+Renderer/STL_to_h_converter.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o
+.PHONY : Renderer/STL_to_h_converter.c.o
+
+Renderer/STL_to_h_converter.i: Renderer/STL_to_h_converter.c.i
+.PHONY : Renderer/STL_to_h_converter.i
+
+# target to preprocess a source file
+Renderer/STL_to_h_converter.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.i
+.PHONY : Renderer/STL_to_h_converter.c.i
+
+Renderer/STL_to_h_converter.s: Renderer/STL_to_h_converter.c.s
+.PHONY : Renderer/STL_to_h_converter.s
+
+# target to generate assembly for a file
+Renderer/STL_to_h_converter.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.s
+.PHONY : Renderer/STL_to_h_converter.c.s
+
 Validation/syntax.o: Validation/syntax.c.o
 .PHONY : Validation/syntax.o
 
@@ -240,6 +288,12 @@ help:
 	@echo "... Renderer/Renderer_alg.o"
 	@echo "... Renderer/Renderer_alg.i"
 	@echo "... Renderer/Renderer_alg.s"
+	@echo "... Renderer/STL_file_handler.o"
+	@echo "... Renderer/STL_file_handler.i"
+	@echo "... Renderer/STL_file_handler.s"
+	@echo "... Renderer/STL_to_h_converter.o"
+	@echo "... Renderer/STL_to_h_converter.i"
+	@echo "... Renderer/STL_to_h_converter.s"
 	@echo "... Validation/syntax.o"
 	@echo "... Validation/syntax.i"
 	@echo "... Validation/syntax.s"

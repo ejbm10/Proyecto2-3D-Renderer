@@ -15,6 +15,10 @@ add_executable(Server main.c
         Renderer/Renderer_alg.c
         Renderer/Renderer_alg.h
         Renderer/stb_image.h
+        Renderer/STL_file_handler.c
+        Renderer/STL_file_handler.h
+        Renderer/STL_to_h_converter.c
+        Renderer/STL_to_h_converter.h
         Validation/syntax.h
         Validation/syntax.c
 )
