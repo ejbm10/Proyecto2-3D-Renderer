@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "Renderer_alg.h"
 #include "STL_file_handler.h"
 #include "STL_to_h_converter.h"
@@ -37,6 +38,7 @@ Shape shapes[MAX_SHAPES];
 int shapeCount = 0;
 
 void parseInput(const char* input) {
+    //printf("%s\n", input);
     const char* ptr = input;
 
     while (ptr != NULL) {
@@ -266,7 +268,7 @@ void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const ch
     // Close the file
     fclose(file);
 
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Sphere Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
 }
@@ -413,7 +415,7 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     // Close the file
     fclose(file);
 
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Cone Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
 }
@@ -532,7 +534,7 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     // Close the file
     fclose(file);
 
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Cube Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
 }
@@ -673,7 +675,7 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     // Close the file
     fclose(file);
 
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Pyramid Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
 }
@@ -820,7 +822,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
 
     // Close the file
     fclose(file);
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Cylinder Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
 }
@@ -992,7 +994,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
 
     // Close the file
     fclose(file);
-    printf("Binary STL file has been written to %s\n", filename);
+    printf("Prism Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
 
     //mergeSTLFiles();
@@ -1042,12 +1044,51 @@ void drawPrism(float radius, float length, int n) {
     glEnd();
 }
 
+void process(){
+
+    for (int i = 0; i < shapeCount; i++) {
+        Shape currentShape = shapes[i];
+
+        const char *filename = "../Resources/binary.stl";  // Output binary STL file
+
+        //printf(&currentShape);
+
+        // Set up transformations for each shape
+        //glLoadIdentity();
+        //glTranslatef(currentShape.position[0], currentShape.position[1], currentShape.position[2]);
+        //glRotatef(currentShape.rotation[0], 1.0f, 0.0f, 0.0f);
+        //glRotatef(currentShape.rotation[1], 0.0f, 1.0f, 0.0f);
+        //glRotatef(currentShape.rotation[2], 0.0f, 0.0f, 1.0f);
+
+        // Determine which shape to draw based on shapeType
+        if (strcmp(currentShape.shapeType, "sphere") == 0) {
+            writeSphereToBinarySTL(currentShape.param1, currentShape.slices, currentShape.stacks,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cube") == 0) {
+            writeCubeToBinarySTL(currentShape.param1, filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
+            writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cone") == 0) {
+            writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
+            writePyramidToBinarySTL(currentShape.param1,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "prism") == 0) {
+            writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+        }
+    }
+
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
-        //printf(&shapes[i]);
+        //printf(&currentShape);
 
         // Set up transformations for each shape
         glLoadIdentity();
@@ -1076,7 +1117,9 @@ void display() {
             drawPrism(currentShape.param1, currentShape.param2, currentShape.n);
         }
     }
+
     glutSwapBuffers();
+
 }
 
 void timer(int value) {
@@ -1127,17 +1170,21 @@ void stl_to_h_file(const char *filePath) {
 
 // Main function
 void process_STL(int argc, char** argv, const char* input) {
+    printf("call of process STL");
     parseInput(input);  // Parse the input string
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
-    glutCreateWindow("3D Shapes");
 
-    glEnable(GL_DEPTH_TEST);
+    process();
 
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutTimerFunc(0, timer, 0);
+    //glutInit(&argc, argv);
+    //glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    //glutInitWindowSize(800, 600);
+    //glutCreateWindow("3D Shapes");
 
-    glutMainLoop();
+    //glEnable(GL_DEPTH_TEST);
+
+    //glutDisplayFunc(display);
+    //glutReshapeFunc(reshape);
+    //glutTimerFunc(0, timer, 0);
+
+    //glutMainLoop();
 }
