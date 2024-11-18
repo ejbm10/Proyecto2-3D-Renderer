@@ -157,7 +157,7 @@ void parseInput(const char* input) {
 }
 
 // Function to write the sphere's geometry to a binary STL file
-void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const char *filename) {
+void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *filename) {
     // Open the file for binary writing
     FILE *file = fopen(filename, "wb");
     if (!file) {
@@ -173,8 +173,35 @@ void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const ch
     uint32_t numTriangles = slices * stacks * 2;  // Each stack creates two triangles per slice
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    for (int partials = 0; partials < size; partials++) {
+        char p_filename[50];
+        snprintf(p_filename, sizeof(p_filename), "partial_%d.stl", partials);
+
+        FILE *pfile = fopen(p_filename, "rb");
+        if (!pfile) {
+            printf("Error: Unable to open file for writing.\n");
+            return;
+        }
+
+        char buff[1024];
+        size_t bytesRead;
+        while ((bytesRead = fread(buff, 1, sizeof(buff), pfile))) {
+            fwrite(buff, 1, bytesRead, file);
+        }
+
+        fclose(pfile);
+    }
+    fclose(file);
+
+    printf("Partial Sphere Binary STL file has been written to %s\n", filename);
+}
+
+void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, const char *filename) {
+    FILE *file = fopen(filename, "wb");
+    GLint stacks = stackEnd - stackStart;
+
     // Iterate over the stacks and slices and create triangles
-    for (int stack = 0; stack < stacks; ++stack) {
+    for (int stack = stackStart; stack < stackEnd; ++stack) {
         for (int slice = 0; slice < slices; ++slice) {
             // Calculate the spherical coordinates for the four vertices of the current quadrilateral
             GLfloat theta1 = 2.0f * M_PI * slice / slices;
@@ -268,9 +295,7 @@ void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const ch
     // Close the file
     fclose(file);
 
-    printf("Sphere Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-    //mergeSTLFiles();
+    printf("Partial Sphere Binary STL file has been written to %s\n", filename);
 }
 
 void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename) {
@@ -822,30 +847,69 @@ void stl_to_h_file(const char *filePath) {
 void process_partial_STL(int rank, int size, const char* input) {
     parseInput(input);  // Parse the input string
 
-    Shape currentShape = shapes[0];
+    for (int i = 0; i < shapeCount; i++) {
+        Shape currentShape = shapes[i];
 
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    const char create[50];
-    snprintf(create, sizeof(create), "touch %s", filename);
-    system(create);
+        const char filename[50];
+        snprintf(filename, sizeof(filename), "../Resources/partial_binary_%d.stl", rank);  // Output binary STL file
+        const char create[50];
+        snprintf(create, sizeof(create), "touch %s", filename);
+        system(create);
 
-    // Determine which shape to draw based on shapeType
-    if (strcmp(currentShape.shapeType, "sphere") == 0) {
-        writeSphereToBinarySTL(currentShape.param1, currentShape.slices, currentShape.stacks,filename);
+        // Determine which shape to draw based on shapeType
+        if (strcmp(currentShape.shapeType, "sphere") == 0) {
+
+            GLint stacks_per_node = currentShape.stacks / size;
+            GLint start = rank * stacks_per_node;
+            GLint end = (rank == size - 1) ? currentShape.stacks : start + stacks_per_node;
+
+            partialSphere(currentShape.param1, currentShape.slices, start, end, filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cube") == 0) {
+            writeCubeToBinarySTL(currentShape.param1, filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
+            writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cone") == 0) {
+            writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
+            writePyramidToBinarySTL(currentShape.param1,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "prism") == 0) {
+            writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+        }
     }
-    else if (strcmp(currentShape.shapeType, "cube") == 0) {
-        writeCubeToBinarySTL(currentShape.param1, filename);
-    }
-    else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
-        writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
-    }
-    else if (strcmp(currentShape.shapeType, "cone") == 0) {
-        writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
-    }
-    else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
-        writePyramidToBinarySTL(currentShape.param1,filename);
-    }
-    else if (strcmp(currentShape.shapeType, "prism") == 0) {
-        writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+}
+
+void process_STL(int size) {
+    for (int i = 0; i < shapeCount; i++) {
+        Shape currentShape = shapes[i];
+
+        const char *filename = "../Resources/binary.stl";  // Output binary STL file
+        const char create[50];
+        snprintf(create, sizeof(create), "touch %s", filename);
+        system(create);
+
+        // Determine which shape to draw based on shapeType
+        if (strcmp(currentShape.shapeType, "sphere") == 0) {
+            writeSphereToBinarySTL(size, currentShape.slices, currentShape.stacks, filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cube") == 0) {
+            writeCubeToBinarySTL(currentShape.param1, filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
+            writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "cone") == 0) {
+            writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
+            writePyramidToBinarySTL(currentShape.param1,filename);
+        }
+        else if (strcmp(currentShape.shapeType, "prism") == 0) {
+            writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+        }
     }
 }
