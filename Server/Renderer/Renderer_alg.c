@@ -175,7 +175,7 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
 
     for (int partials = 0; partials < size; partials++) {
         char p_filename[50];
-        snprintf(p_filename, sizeof(p_filename), "partial_%d.stl", partials);
+        snprintf(p_filename, sizeof(p_filename), "../Resources/partial_binary_%d.stl", partials);
 
         FILE *pfile = fopen(p_filename, "rb");
         if (!pfile) {
