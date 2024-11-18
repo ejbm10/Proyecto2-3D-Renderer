@@ -199,9 +199,8 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
     printf("Partial Sphere Binary STL file has been written to %s\n", filename);
 }
 
-void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, const char *filename) {
+void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, GLint total_stacks, const char *filename) {
     FILE *file = fopen(filename, "wb");
-    GLint stacks = stackEnd - stackStart;
 
     // Iterate over the stacks and slices and create triangles
     for (int stack = stackStart; stack < stackEnd; ++stack) {
@@ -209,8 +208,8 @@ void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEn
             // Calculate the spherical coordinates for the four vertices of the current quadrilateral
             GLfloat theta1 = 2.0f * M_PI * slice / slices;
             GLfloat theta2 = 2.0f * M_PI * (slice + 1) / slices;
-            GLfloat phi1 = M_PI * stack / stacks;
-            GLfloat phi2 = M_PI * (stack + 1) / stacks;
+            GLfloat phi1 = M_PI * stack / total_stacks;
+            GLfloat phi2 = M_PI * (stack + 1) / total_stacks;
 
             // Calculate the vertex positions for the first triangle
             GLfloat x1 = radius * sinf(phi1) * cosf(theta1);
@@ -866,7 +865,7 @@ void process_partial_STL(int rank, int size, const char* input) {
             GLint start = rank * stacks_per_node;
             GLint end = (rank == size - 1) ? currentShape.stacks : start + stacks_per_node;
 
-            partialSphere(currentShape.param1, currentShape.slices, start, end, filename);
+            partialSphere(currentShape.param1, currentShape.slices, start, end, currentShape.stacks, filename);
         }
         else if (strcmp(currentShape.shapeType, "cube") == 0) {
             writeCubeToBinarySTL(currentShape.param1, filename);
