@@ -249,6 +249,30 @@ Validation/syntax.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.s
 .PHONY : Validation/syntax.c.s
 
+biblioteca.o: biblioteca.c.o
+.PHONY : biblioteca.o
+
+# target to build an object file
+biblioteca.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.o
+.PHONY : biblioteca.c.o
+
+biblioteca.i: biblioteca.c.i
+.PHONY : biblioteca.i
+
+# target to preprocess a source file
+biblioteca.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.i
+.PHONY : biblioteca.c.i
+
+biblioteca.s: biblioteca.c.s
+.PHONY : biblioteca.s
+
+# target to generate assembly for a file
+biblioteca.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.s
+.PHONY : biblioteca.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -297,6 +321,9 @@ help:
 	@echo "... Validation/syntax.o"
 	@echo "... Validation/syntax.i"
 	@echo "... Validation/syntax.s"
+	@echo "... biblioteca.o"
+	@echo "... biblioteca.i"
+	@echo "... biblioteca.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

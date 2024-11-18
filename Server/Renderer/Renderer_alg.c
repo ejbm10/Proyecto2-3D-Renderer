@@ -1159,7 +1159,7 @@ void stl_to_h_file(const char *filePath) {
 
     Mesh mesh = readStl(filePath);
     scaleMesh(&mesh);
-    writeHeaderFile(&mesh, "shapes.h");
+    writeHeaderFile(&mesh, "../pruebaconect/shapes.h");
 
     free(mesh.vertices);
     free(mesh.triangles);
