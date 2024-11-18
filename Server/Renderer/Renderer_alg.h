@@ -24,5 +24,6 @@ void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat n
 void writePrismToBinarySTL(float radius, float length, int n, const char *filename);
 void stl_to_h_file(const char *filePath);
 void process_partial_STL(int rank, int size, const char* input);
+void process_STL(int size);
 
 #endif //RENDERER_ALG_H

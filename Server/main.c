@@ -114,6 +114,8 @@ int main(int argc, char const* argv[])
 
                     MPI_Barrier(MPI_COMM_WORLD);
 
+                    process_STL(size);
+
                     send_serial(); //Enviar al Hardware
                 }
 
