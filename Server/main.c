@@ -54,14 +54,15 @@ int main(int argc, char const* argv[])
 
     srand(time(NULL));
 
-    int my_rank;
+    int rank, size;
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     struct RSAKeyPair *keys = generate_keys();
 
-    if (my_rank == 0) {
-        
+    if (rank == 0) {
+
         char buffer[1024];
 
         int active = 1;
@@ -99,15 +100,18 @@ int main(int argc, char const* argv[])
                     printf("Server shutting down...\n");
                     close(client_fd);
                     active = 0;
-                    //MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    if (size > 1) MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
                 }
 
                 else if (validate_instruction(final_msg)) {
-                    printf("Node %d sent: %s\n", my_rank, buffer);
+                    printf("Node %d sent: %s\n", rank, buffer);
+
+                    if (size > 0 ) MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
 
                     process_STL(argc, argv, final_msg);
 
-                    //MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    MPI_Barrier(MPI_COMM_WORLD);
+
                     send_serial(); //Enviar al Hardware
                 }
 
@@ -135,7 +139,8 @@ int main(int argc, char const* argv[])
 
         while (active) {
             char buffer[1024];
-            MPI_Recv(buffer, sizeof(buffer), MPI_CHAR, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
 
             char final_msg[1024] = { 0 };
             int count;
@@ -147,7 +152,8 @@ int main(int argc, char const* argv[])
 
             if (strcmp(final_msg, "shutdown") == 0) active = 0;
             else {
-                printf("Node %d received: %s\n", my_rank, final_msg);
+                printf("Node %d received: %s\n", rank, final_msg);
+                MPI_Barrier(MPI_COMM_WORLD);
             }
         }
     }
