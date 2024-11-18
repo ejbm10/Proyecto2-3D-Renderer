@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.o.d"
   "CMakeFiles/Server.dir/Validation/syntax.c.o"
   "CMakeFiles/Server.dir/Validation/syntax.c.o.d"
+  "CMakeFiles/Server.dir/biblioteca.c.o"
+  "CMakeFiles/Server.dir/biblioteca.c.o.d"
   "CMakeFiles/Server.dir/main.c.o"
   "CMakeFiles/Server.dir/main.c.o.d"
   "Server"

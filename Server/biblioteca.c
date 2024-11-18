@@ -4,6 +4,7 @@
 #include <termios.h>
 #include <string.h>
 #include <stdlib.h>
+#include "biblioteca.h"
 
 void send_serial() {
     // Comando de upload de Arduino, reemplaza las rutas y puertos según sea necesario

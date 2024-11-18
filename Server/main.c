@@ -11,6 +11,8 @@
 #include "GL/glut.h"
 #include "Validation/syntax.h"
 
+#include "biblioteca.h"
+
 #define PORT 8080
 
 int server_fd, client_fd;
@@ -106,6 +108,7 @@ int main(int argc, char const* argv[])
                     process_STL(argc, argv, final_msg);
 
                     //MPI_Send(buffer, sizeof(buffer), MPI_CHAR, 1, 0, MPI_COMM_WORLD);
+                    send_serial(); //Enviar al Hardware
                 }
 
                 memset(buffer, 0, sizeof(buffer));

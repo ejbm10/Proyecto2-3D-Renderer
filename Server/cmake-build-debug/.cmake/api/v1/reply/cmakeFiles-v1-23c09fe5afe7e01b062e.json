@@ -161,8 +161,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug",
-		"source" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server"
+		"build" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug",
+		"source" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server"
 	},
 	"version" : 
 	{

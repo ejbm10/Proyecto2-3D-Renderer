@@ -57,10 +57,10 @@ RM = /snap/clion/296/bin/cmake/linux/x64/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server
+CMAKE_SOURCE_DIR = /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug
+CMAKE_BINARY_DIR = /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -249,6 +249,30 @@ Validation/syntax.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Validation/syntax.c.s
 .PHONY : Validation/syntax.c.s
 
+biblioteca.o: biblioteca.c.o
+.PHONY : biblioteca.o
+
+# target to build an object file
+biblioteca.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.o
+.PHONY : biblioteca.c.o
+
+biblioteca.i: biblioteca.c.i
+.PHONY : biblioteca.i
+
+# target to preprocess a source file
+biblioteca.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.i
+.PHONY : biblioteca.c.i
+
+biblioteca.s: biblioteca.c.s
+.PHONY : biblioteca.s
+
+# target to generate assembly for a file
+biblioteca.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/biblioteca.c.s
+.PHONY : biblioteca.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -297,6 +321,9 @@ help:
 	@echo "... Validation/syntax.o"
 	@echo "... Validation/syntax.i"
 	@echo "... Validation/syntax.s"
+	@echo "... biblioteca.o"
+	@echo "... biblioteca.i"
+	@echo "... biblioteca.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -5,6 +5,7 @@ find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 
+
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 
 set(CMAKE_C_COMPILER mpicc)
@@ -21,6 +22,8 @@ add_executable(Server main.c
         Renderer/STL_to_h_converter.h
         Validation/syntax.h
         Validation/syntax.c
+        biblioteca.h
+        biblioteca.c
 )
 
 target_link_libraries(Server ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} glfw m)
