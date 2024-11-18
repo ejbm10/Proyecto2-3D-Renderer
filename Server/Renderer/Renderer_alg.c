@@ -156,25 +156,8 @@ void parseInput(const char* input) {
     }
 }
 
-// Function to write the sphere's geometry to a binary STL file
-void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *filename) {
-    // Open the file for binary writing
-    FILE *file = fopen(filename, "wb");
-    if (!file) {
-        printf("Error: Unable to open file for writing.\n");
-        return;
-    }
-
-    // Write the 80-byte header (can be any data, here we use zeros)
-    char header[80] = {0};
-    fwrite(header, sizeof(char), 80, file);
-
-    // Write the number of triangles (4 bytes, little-endian)
-    uint32_t numTriangles = slices * stacks * 2;  // Each stack creates two triangles per slice
-    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
-
-    fclose(file);
-    file = fopen(filename, "ab");
+void appendBytes(int size, const char* filename) {
+    FILE *file = fopen(filename, "ab");
 
     for (int partials = 0; partials < size; partials++) {
         char p_filename[50];
@@ -195,8 +178,30 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
         fclose(pfile);
     }
     fclose(file);
+}
 
-    printf("Partial Sphere Binary STL file has been written to %s\n", filename);
+// Function to write the sphere's geometry to a binary STL file
+void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *filename) {
+    // Open the file for binary writing
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        printf("Error: Unable to open file for writing.\n");
+        return;
+    }
+
+    // Write the 80-byte header (can be any data, here we use zeros)
+    char header[80] = {0};
+    fwrite(header, sizeof(char), 80, file);
+
+    // Write the number of triangles (4 bytes, little-endian)
+    uint32_t numTriangles = slices * stacks * 2;  // Each stack creates two triangles per slice
+    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
+
+    fclose(file);
+
+    appendBytes(size, filename);
+
+    printf("Sphere Binary STL file has been written to %s\n", filename);
 }
 
 void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, GLint total_stacks, const char *filename) {
@@ -415,7 +420,37 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     //mergeSTLFiles();
 }
 
-void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
+void writeCubeToBinarySTL(int size, const char *filename) {
+    // Open the file for binary writing
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        printf("Error: Unable to open file for writing.\n");
+        return;
+    }
+
+    // Write the 80-byte header (can be any data, here we use zeros)
+    char header[80] = {0};
+    fwrite(header, sizeof(char), 80, file);
+
+    // Write the number of triangles (4 bytes, little-endian)
+    uint32_t numTriangles = 12;
+    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
+
+    fclose(file);
+
+    appendBytes(size, filename);
+
+    printf("Cube Binary STL file has been written to %s\n", filename);
+}
+
+void partialCube(GLfloat sideLength, int faceStart, int faceEnd, const char* filename) {
+
+    FILE *file = fopen(filename, "wb");
+    if (!file) {
+        printf("Error: Unable to open file for writing.\n");
+        return;
+    }
+
     // Cube vertices are calculated based on the side length
     GLfloat halfSide = sideLength / 2.0f;
 
@@ -441,23 +476,8 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
         {0, 3, 7}, {0, 7, 4}   // Left face
     };
 
-    // Open the file for binary writing
-    FILE *file = fopen(filename, "wb");
-    if (!file) {
-        printf("Error: Unable to open file for writing.\n");
-        return;
-    }
-
-    // Write the 80-byte header (can be any data, here we use zeros)
-    char header[80] = {0};
-    fwrite(header, sizeof(char), 80, file);
-
-    // Write the number of triangles (4 bytes, little-endian)
-    uint32_t numTriangles = 12;
-    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
-
     // Iterate over each face and write it to the binary STL file
-    for (int i = 0; i < 12; i++) {
+    for (int i = faceStart; i < faceEnd; i++) {
         int v0 = faces[i][0];
         int v1 = faces[i][1];
         int v2 = faces[i][2];
@@ -493,9 +513,7 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     // Close the file
     fclose(file);
 
-    printf("Cube Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-    //mergeSTLFiles();
+    printf("Partial Cube Binary STL file has been written to %s\n", filename);
 }
 
 void writePyramidToBinarySTL(GLfloat height, const char *filename) {
@@ -868,7 +886,12 @@ void process_partial_STL(int rank, int size, const char* input) {
             partialSphere(currentShape.param1, currentShape.slices, start, end, currentShape.stacks, filename);
         }
         else if (strcmp(currentShape.shapeType, "cube") == 0) {
-            writeCubeToBinarySTL(currentShape.param1, filename);
+
+            int faces_per_node = 12 / size;
+            int start = rank * faces_per_node;
+            int end = (rank == size - 1) ? 12 : start + faces_per_node;
+
+            partialCube(currentShape.param1, start, end, filename);
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
             writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
@@ -899,7 +922,7 @@ void process_STL(int size) {
             writeSphereToBinarySTL(size, currentShape.slices, currentShape.stacks, filename);
         }
         else if (strcmp(currentShape.shapeType, "cube") == 0) {
-            writeCubeToBinarySTL(currentShape.param1, filename);
+            writeCubeToBinarySTL(size, filename);
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
             writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);

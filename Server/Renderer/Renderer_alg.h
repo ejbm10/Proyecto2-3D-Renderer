@@ -15,7 +15,7 @@ typedef struct {
 } STLTriangle;
 
 void parseInput(const char* input);
-void writeCubeToBinarySTL(GLfloat sideLength, const char *filename);
+void writeCubeToBinarySTL(int size, const char *filename);
 void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *filename);
 void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename);
 void writePyramidToBinarySTL(GLfloat height, const char *filename);
