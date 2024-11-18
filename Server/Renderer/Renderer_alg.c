@@ -173,6 +173,9 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
     uint32_t numTriangles = slices * stacks * 2;  // Each stack creates two triangles per slice
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    fclose(file);
+    file = fopen(filename, "ab");
+
     for (int partials = 0; partials < size; partials++) {
         char p_filename[50];
         snprintf(p_filename, sizeof(p_filename), "../Resources/partial_binary_%d.stl", partials);
