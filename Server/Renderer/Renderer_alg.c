@@ -273,38 +273,6 @@ void writeSphereToBinarySTL(GLfloat radius, GLint slices, GLint stacks, const ch
     //mergeSTLFiles();
 }
 
-
-void drawSphere(GLfloat radius, GLint slices, GLint stacks) {
-
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    writeSphereToBinarySTL(1.0, slices, stacks, filename);
-    GLUquadric *quad = gluNewQuadric();
-
-    for (int stack = 0; stack <= stacks; ++stack) {
-        GLfloat colorValue = (GLfloat)stack / stacks;
-        glColor3f(colorValue, 1.0f - colorValue, 0.5f);
-
-        glBegin(GL_QUAD_STRIP);
-        for (int slice = 0; slice <= slices; ++slice) {
-            GLfloat theta = 2.0f * M_PI * slice / slices;
-            GLfloat phi1 = M_PI * (stack) / stacks;
-            GLfloat phi2 = M_PI * (stack + 1) / stacks;
-
-            GLfloat x1 = radius * sinf(phi1) * cosf(theta);
-            GLfloat y1 = radius * cosf(phi1);
-            GLfloat z1 = radius * sinf(phi1) * sinf(theta);
-            glVertex3f(x1, y1, z1);
-
-            GLfloat x2 = radius * sinf(phi2) * cosf(theta);
-            GLfloat y2 = radius * cosf(phi2);
-            GLfloat z2 = radius * sinf(phi2) * sinf(theta);
-            glVertex3f(x2, y2, z2);
-        }
-        glEnd();
-    }
-    gluDeleteQuadric(quad);
-}
-
 void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename) {
     // Open the file for binary writing
     FILE *file = fopen(filename, "wb");
@@ -420,42 +388,6 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     //mergeSTLFiles();
 }
 
-// Function to draw a cone with a gradient color
-void drawCone(GLfloat radius, GLfloat height, GLint slices) {
-
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    writeConeToBinarySTL(radius, height, slices, filename);
-    GLfloat halfHeight = height / 2.0f;
-
-    // Draw the base circle
-    glBegin(GL_TRIANGLE_FAN);
-    glColor3f(1.0f, 0.5f, 0.0f);  // Color at the center of the base
-    glVertex3f(0.0f, -halfHeight, 0.0f);  // Center of the base
-
-    for (int i = 0; i <= slices; ++i) {
-        GLfloat angle = 2.0f * M_PI * i / slices;
-        GLfloat x = radius * cos(angle);
-        GLfloat z = radius * sin(angle);
-        glColor3f(0.5f, 0.0f, 1.0f);  // Color around the edge of the base
-        glVertex3f(x, -halfHeight, z);
-    }
-    glEnd();
-
-    // Draw the cone's side
-    glBegin(GL_TRIANGLE_STRIP);
-    for (int i = 0; i <= slices; ++i) {
-        GLfloat angle = 2.0f * M_PI * i / slices;
-        GLfloat x = radius * cos(angle);
-        GLfloat z = radius * sin(angle);
-
-        glColor3f(1.0f, 0.5f, 0.0f);  // Color at the tip
-        glVertex3f(0.0f, halfHeight, 0.0f);  // Tip of the cone
-        glColor3f(0.5f, 0.0f, 1.0f);  // Color along the base edge
-        glVertex3f(x, -halfHeight, z);  // Base edge
-    }
-    glEnd();
-}
-
 void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     // Cube vertices are calculated based on the side length
     GLfloat halfSide = sideLength / 2.0f;
@@ -537,58 +469,6 @@ void writeCubeToBinarySTL(GLfloat sideLength, const char *filename) {
     printf("Cube Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
-}
-
-// Function to draw a cube
-void drawCube(GLfloat sideLength) {
-    glBegin(GL_QUADS);
-
-    // Front face
-    glColor3f(1.0f, 0.0f, 0.0f); // Red
-    glVertex3f(-sideLength/2, -sideLength/2,  sideLength/2);
-    glVertex3f( sideLength/2, -sideLength/2,  sideLength/2);
-    glVertex3f( sideLength/2,  sideLength/2,  sideLength/2);
-    glVertex3f(-sideLength/2,  sideLength/2,  sideLength/2);
-
-    // Back face
-    glColor3f(0.0f, 1.0f, 0.0f); // Green
-    glVertex3f(-sideLength/2, -sideLength/2, -sideLength/2);
-    glVertex3f(-sideLength/2,  sideLength/2, -sideLength/2);
-    glVertex3f( sideLength/2,  sideLength/2, -sideLength/2);
-    glVertex3f( sideLength/2, -sideLength/2, -sideLength/2);
-
-    // Left face
-    glColor3f(0.0f, 0.0f, 1.0f); // Blue
-    glVertex3f(-sideLength/2, -sideLength/2, -sideLength/2);
-    glVertex3f(-sideLength/2, -sideLength/2,  sideLength/2);
-    glVertex3f(-sideLength/2,  sideLength/2,  sideLength/2);
-    glVertex3f(-sideLength/2,  sideLength/2, -sideLength/2);
-
-    // Right face
-    glColor3f(1.0f, 1.0f, 0.0f); // Yellow
-    glVertex3f(sideLength/2, -sideLength/2, -sideLength/2);
-    glVertex3f(sideLength/2,  sideLength/2, -sideLength/2);
-    glVertex3f(sideLength/2,  sideLength/2,  sideLength/2);
-    glVertex3f(sideLength/2, -sideLength/2,  sideLength/2);
-
-    // Top face
-    glColor3f(1.0f, 0.0f, 1.0f); // Magenta
-    glVertex3f(-sideLength/2, sideLength/2, -sideLength/2);
-    glVertex3f(-sideLength/2, sideLength/2,  sideLength/2);
-    glVertex3f( sideLength/2, sideLength/2,  sideLength/2);
-    glVertex3f( sideLength/2, sideLength/2, -sideLength/2);
-
-    // Bottom face
-    glColor3f(0.0f, 1.0f, 1.0f); // Cyan
-    glVertex3f(-sideLength/2, -sideLength/2, -sideLength/2);
-    glVertex3f( sideLength/2, -sideLength/2, -sideLength/2);
-    glVertex3f( sideLength/2, -sideLength/2,  sideLength/2);
-    glVertex3f(-sideLength/2, -sideLength/2,  sideLength/2);
-
-    const char *filename = "../Resources/binary.stl";  // Output STL file
-    writeCubeToBinarySTL(sideLength, filename);
-
-    glEnd();
 }
 
 void writePyramidToBinarySTL(GLfloat height, const char *filename) {
@@ -678,40 +558,6 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     printf("Pyramid Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
-}
-
-// Function to draw a pyramid
-void drawPyramid(GLfloat height) {
-
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    writePyramidToBinarySTL(height, filename);
-    glBegin(GL_TRIANGLES);
-
-    // Front face
-    glColor3f(1.0f, 0.0f, 0.0f); // Red
-    glVertex3f(0.0f, height, 0.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
-
-    // Right face
-    glColor3f(0.0f, 1.0f, 0.0f); // Green
-    glVertex3f(0.0f, height, 0.0f);
-    glVertex3f(1.0f, -1.0f, 1.0f);
-    glVertex3f(1.0f, -1.0f, -1.0f);
-
-    // Back face
-    glColor3f(0.0f, 0.0f, 1.0f); // Blue
-    glVertex3f(0.0f, height, 0.0f);
-    glVertex3f(1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-
-    // Left face
-    glColor3f(1.0f, 1.0f, 0.0f); // Yellow
-    glVertex3f(0.0f, height, 0.0f);
-    glVertex3f(-1.0f, -1.0f, -1.0f);
-    glVertex3f(-1.0f, -1.0f, 1.0f);
-
-    glEnd();
 }
 
 void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename) {
@@ -825,46 +671,6 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     printf("Cylinder Binary STL file has been written to %s\n", filename);
     stl_to_h_file(filename);
     //mergeSTLFiles();
-}
-
-// Function to draw a cylinder with gradient color
-void drawCylinder(GLfloat radius, GLfloat height, GLint slices) {
-
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    writeCylinderToBinarySTL(radius,height,360,filename);
-
-    GLfloat angle;
-    glBegin(GL_QUAD_STRIP);
-    for (int i = 0; i <= slices; i++) {
-        angle = i * 2.0f * M_PI / slices;
-        GLfloat x = radius * cos(angle);
-        GLfloat y = radius * sin(angle);
-
-        glColor3f((float)i / slices, 0.0f, 1.0f - (float)i / slices);
-        glVertex3f(x, y, height / 2);
-        glVertex3f(x, y, -height / 2);
-    }
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < slices; i++) {
-        angle = i * 2.0f * M_PI / slices;
-        GLfloat x = radius * cos(angle);
-        GLfloat y = radius * sin(angle);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(x, y, height / 2);
-    }
-    glEnd();
-
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < slices; i++) {
-        angle = i * 2.0f * M_PI / slices;
-        GLfloat x = radius * cos(angle);
-        GLfloat y = radius * sin(angle);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(x, y, -height / 2);
-    }
-    glEnd();
 }
 
 void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat normal[3]) {
@@ -1000,65 +806,29 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     //mergeSTLFiles();
 }
 
-void drawPrism(float radius, float length, int n) {
-    const char *filename = "../Resources/binary.stl";  // Output binary STL file
-    writePrismToBinarySTL(radius, length, n, filename);
-    // Angle increment for each side of the cylinder
-    float angleIncrement = 2 * M_PI / n;
+void stl_to_h_file(const char *filePath) {
 
-    // Draw the cylindrical side (side surface)
-    glBegin(GL_QUAD_STRIP);
-    for (int i = 0; i <= n; i++) {
-        float angle = i * angleIncrement;
-        float x = radius * cos(angle);
-        float y = radius * sin(angle);
+    Mesh mesh = readStl(filePath);
+    scaleMesh(&mesh);
+    writeHeaderFile(&mesh, "../pruebaconect/shapes.h");
 
-        // Draw two vertices at the top and bottom
-        glVertex3f(x, y, 0.0f);             // Bottom
-        GLfloat colorValue = (GLfloat)y/ x;
-        glColor3f(0.5f, 1.0f - colorValue, colorValue);
-        glVertex3f(x, y, length);           // Top
-    }
-    glEnd();
+    free(mesh.vertices);
+    free(mesh.triangles);
+    free(mesh.normals);
 
-    // Draw the bottom face
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < n; i++) {
-        float angle = i * angleIncrement;
-        float x = radius * cos(angle);
-        float y = radius * sin(angle);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(x, y, 0.0f);
-    }
-    glEnd();
-
-    // Draw the top face
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < n; i++) {
-        float angle = i * angleIncrement;
-        float x = radius * cos(angle);
-        float y = radius * sin(angle);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(x, y, length);
-    }
-    glEnd();
+    printf("Header file '%s' generated successfully.\n", "shapes.h");
 }
 
-void process(){
+void process_partial_STL(int rank, int size, const char* input) {
+    parseInput(input);  // Parse the input string
 
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
 
         const char *filename = "../Resources/binary.stl";  // Output binary STL file
-
-        //printf(&currentShape);
-
-        // Set up transformations for each shape
-        //glLoadIdentity();
-        //glTranslatef(currentShape.position[0], currentShape.position[1], currentShape.position[2]);
-        //glRotatef(currentShape.rotation[0], 1.0f, 0.0f, 0.0f);
-        //glRotatef(currentShape.rotation[1], 0.0f, 1.0f, 0.0f);
-        //glRotatef(currentShape.rotation[2], 0.0f, 0.0f, 1.0f);
+        const char create[50];
+        snprintf(create, sizeof(create), "touch %s", filename);
+        system(create);
 
         // Determine which shape to draw based on shapeType
         if (strcmp(currentShape.shapeType, "sphere") == 0) {
@@ -1080,111 +850,4 @@ void process(){
             writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
         }
     }
-
-}
-
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    for (int i = 0; i < shapeCount; i++) {
-        Shape currentShape = shapes[i];
-        //printf(&currentShape);
-
-        // Set up transformations for each shape
-        glLoadIdentity();
-        glTranslatef(currentShape.position[0], currentShape.position[1], currentShape.position[2]);
-        glRotatef(currentShape.rotation[0], 1.0f, 0.0f, 0.0f);
-        glRotatef(currentShape.rotation[1], 0.0f, 1.0f, 0.0f);
-        glRotatef(currentShape.rotation[2], 0.0f, 0.0f, 1.0f);
-
-        // Determine which shape to draw based on shapeType
-        if (strcmp(currentShape.shapeType, "sphere") == 0) {
-            drawSphere(currentShape.param1, currentShape.slices, currentShape.stacks);
-        }
-        else if (strcmp(currentShape.shapeType, "cube") == 0) {
-            drawCube(currentShape.param1);
-        }
-        else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
-            drawCylinder(currentShape.param1, currentShape.param2, currentShape.slices);
-        }
-        else if (strcmp(currentShape.shapeType, "cone") == 0) {
-            drawCone(currentShape.param1, currentShape.param2, currentShape.slices);
-        }
-        else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
-            drawPyramid(currentShape.param1);
-        }
-        else if (strcmp(currentShape.shapeType, "prism") == 0) {
-            drawPrism(currentShape.param1, currentShape.param2, currentShape.n);
-        }
-    }
-
-    glutSwapBuffers();
-
-}
-
-void timer(int value) {
-    for (int i = 0; i < shapeCount; i++) {
-        shapes[i].rotation[0] += 1.0f;  // Increment X rotation
-        if (shapes[i].rotation[0] > 360) shapes[i].rotation[0] -= 360;
-
-        shapes[i].rotation[1] += 2.0f;  // Increment Y rotation
-        if (shapes[i].rotation[1] > 360) shapes[i].rotation[1] -= 360;
-
-        shapes[i].rotation[2] += 3.0f;  // Increment Z rotation
-        if (shapes[i].rotation[2] > 360) shapes[i].rotation[2] -= 360;
-    }
-
-    glutPostRedisplay();
-    glutTimerFunc(16, timer, 0);
-}
-
-
-// Reshape function to handle window resizing
-void reshape(int w, int h) {
-    if (h == 0) h = 1;
-    float aspect = (float)w / (float)h;
-
-    glViewport(0, 0, w, h);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0f, aspect, 1.0f, 20.0f);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-}
-
-
-void stl_to_h_file(const char *filePath) {
-
-    Mesh mesh = readStl(filePath);
-    scaleMesh(&mesh);
-    writeHeaderFile(&mesh, "../pruebaconect/shapes.h");
-
-    free(mesh.vertices);
-    free(mesh.triangles);
-    free(mesh.normals);
-
-    printf("Header file '%s' generated successfully.\n", "shapes.h");
-}
-
-// Main function
-void process_STL(int argc, char** argv, const char* input) {
-    printf("call of process STL");
-    parseInput(input);  // Parse the input string
-
-    process();
-
-    //glutInit(&argc, argv);
-    //glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    //glutInitWindowSize(800, 600);
-    //glutCreateWindow("3D Shapes");
-
-    //glEnable(GL_DEPTH_TEST);
-
-    //glutDisplayFunc(display);
-    //glutReshapeFunc(reshape);
-    //glutTimerFunc(0, timer, 0);
-
-    //glutMainLoop();
 }

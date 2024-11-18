@@ -104,11 +104,13 @@ int main(int argc, char const* argv[])
                 }
 
                 else if (validate_instruction(final_msg)) {
+                    system("rm -rf ../Resources/*");
+
                     printf("Node %d sent: %s\n", rank, buffer);
 
                     if (size > 0 ) MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
 
-                    process_STL(argc, argv, final_msg);
+                    process_partial_STL(rank, size, final_msg);
 
                     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -153,6 +155,9 @@ int main(int argc, char const* argv[])
             if (strcmp(final_msg, "shutdown") == 0) active = 0;
             else {
                 printf("Node %d received: %s\n", rank, final_msg);
+
+                process_partial_STL(rank, size, final_msg);
+
                 MPI_Barrier(MPI_COMM_WORLD);
             }
         }
