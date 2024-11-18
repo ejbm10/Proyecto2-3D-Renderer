@@ -516,7 +516,7 @@ void partialCube(GLfloat sideLength, int faceStart, int faceEnd, const char* fil
     printf("Partial Cube Binary STL file has been written to %s\n", filename);
 }
 
-void writePyramidToBinarySTL(GLfloat height, const char *filename) {
+void writePyramidToBinarySTL(int size, const char *filename) {
     // Open the file for binary writing
     FILE *file = fopen(filename, "wb");
     if (!file) {
@@ -532,6 +532,16 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     uint32_t numTriangles = 4;
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    fclose(file);
+
+    appendBytes(size, filename);
+
+    printf("Pyramid Binary STL file has been written to %s\n", filename);
+}
+
+void partialPyramid(GLfloat height, int faceStart, int faceEnd, const char* filename) {
+    FILE *file = fopen(filename, "wb");
+
     // Define the base vertices of the pyramid
     GLfloat baseVertices[4][3] = {
         {-1.0f, -1.0f, 1.0f},  // Front-left
@@ -543,66 +553,76 @@ void writePyramidToBinarySTL(GLfloat height, const char *filename) {
     // Define the apex of the pyramid (tip)
     GLfloat apex[3] = {0.0f, height, 0.0f};
 
-    // 1. Front face
-    // Normal is computed by cross product of two vectors: (b - a) and (c - a)
-    GLfloat normal1[3] = {0.0f, 1.0f, 0.0f}; // Upward normal for front face
-    // Write normal
-    fwrite(normal1, sizeof(GLfloat), 3, file);
+    for (int face = faceStart; face < faceEnd; face++) {
+        switch (face) {
+            case 0:
+                // 1. Front face
+                // Normal is computed by cross product of two vectors: (b - a) and (c - a)
+                GLfloat normal1[3] = {0.0f, 1.0f, 0.0f}; // Upward normal for front face
 
-    // Vertices for the front face (apex, front-left, front-right)
-    fwrite(apex, sizeof(GLfloat), 3, file); // Apex
-    fwrite(baseVertices[0], sizeof(GLfloat), 3, file); // Front-left
-    fwrite(baseVertices[1], sizeof(GLfloat), 3, file); // Front-right
+                // Write normal
+                fwrite(normal1, sizeof(GLfloat), 3, file);
 
-    // Attribute byte count (2 bytes, typically 0)
-    uint16_t attributeByteCount = 0;
-    fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                // Vertices for the front face (apex, front-left, front-right)
+                fwrite(apex, sizeof(GLfloat), 3, file); // Apex
+                fwrite(baseVertices[0], sizeof(GLfloat), 3, file); // Front-left
+                fwrite(baseVertices[1], sizeof(GLfloat), 3, file); // Front-right
 
-    // 2. Right face
-    GLfloat normal2[3] = {1.0f, 0.0f, 0.0f}; // Rightward normal for right face
-    // Write normal
-    fwrite(normal2, sizeof(GLfloat), 3, file);
+                // Attribute byte count (2 bytes, typically 0)
+                uint16_t attributeByteCount = 0;
+                fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                break;
+            case 1:
+                // 2. Right face
+                GLfloat normal2[3] = {1.0f, 0.0f, 0.0f}; // Rightward normal for right face
+                // Write normal
+                fwrite(normal2, sizeof(GLfloat), 3, file);
 
-    // Vertices for the right face (apex, front-right, back-right)
-    fwrite(apex, sizeof(GLfloat), 3, file); // Apex
-    fwrite(baseVertices[1], sizeof(GLfloat), 3, file); // Front-right
-    fwrite(baseVertices[2], sizeof(GLfloat), 3, file); // Back-right
+                // Vertices for the right face (apex, front-right, back-right)
+                fwrite(apex, sizeof(GLfloat), 3, file); // Apex
+                fwrite(baseVertices[1], sizeof(GLfloat), 3, file); // Front-right
+                fwrite(baseVertices[2], sizeof(GLfloat), 3, file); // Back-right
 
-    // Attribute byte count (2 bytes, typically 0)
-    fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                // Attribute byte count (2 bytes, typically 0)
+                fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                break;
+            case 2:
+                // 3. Back face
+                GLfloat normal3[3] = {0.0f, -1.0f, 0.0f}; // Downward normal for back face
+                // Write normal
+                fwrite(normal3, sizeof(GLfloat), 3, file);
 
-    // 3. Back face
-    GLfloat normal3[3] = {0.0f, -1.0f, 0.0f}; // Downward normal for back face
-    // Write normal
-    fwrite(normal3, sizeof(GLfloat), 3, file);
+                // Vertices for the back face (apex, back-right, back-left)
+                fwrite(apex, sizeof(GLfloat), 3, file); // Apex
+                fwrite(baseVertices[2], sizeof(GLfloat), 3, file); // Back-right
+                fwrite(baseVertices[3], sizeof(GLfloat), 3, file); // Back-left
 
-    // Vertices for the back face (apex, back-right, back-left)
-    fwrite(apex, sizeof(GLfloat), 3, file); // Apex
-    fwrite(baseVertices[2], sizeof(GLfloat), 3, file); // Back-right
-    fwrite(baseVertices[3], sizeof(GLfloat), 3, file); // Back-left
+                // Attribute byte count (2 bytes, typically 0)
+                fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                break;
+            case 3:
+                // 4. Left face
+                GLfloat normal4[3] = {-1.0f, 0.0f, 0.0f}; // Leftward normal for left face
+                // Write normal
+                fwrite(normal4, sizeof(GLfloat), 3, file);
 
-    // Attribute byte count (2 bytes, typically 0)
-    fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                // Vertices for the left face (apex, back-left, front-left)
+                fwrite(apex, sizeof(GLfloat), 3, file); // Apex
+                fwrite(baseVertices[3], sizeof(GLfloat), 3, file); // Back-left
+                fwrite(baseVertices[0], sizeof(GLfloat), 3, file); // Front-left
 
-    // 4. Left face
-    GLfloat normal4[3] = {-1.0f, 0.0f, 0.0f}; // Leftward normal for left face
-    // Write normal
-    fwrite(normal4, sizeof(GLfloat), 3, file);
-
-    // Vertices for the left face (apex, back-left, front-left)
-    fwrite(apex, sizeof(GLfloat), 3, file); // Apex
-    fwrite(baseVertices[3], sizeof(GLfloat), 3, file); // Back-left
-    fwrite(baseVertices[0], sizeof(GLfloat), 3, file); // Front-left
-
-    // Attribute byte count (2 bytes, typically 0)
-    fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                // Attribute byte count (2 bytes, typically 0)
+                fwrite(&attributeByteCount, sizeof(uint16_t), 1, file);
+                break;
+            default:
+                printf("Error: Invalid Face.\n");
+        }
+    }
 
     // Close the file
     fclose(file);
 
-    printf("Pyramid Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-    //mergeSTLFiles();
+    printf("Partial Pyramid Binary STL file has been written to %s\n", filename);
 }
 
 void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename) {
@@ -879,18 +899,22 @@ void process_partial_STL(int rank, int size, const char* input) {
         // Determine which shape to draw based on shapeType
         if (strcmp(currentShape.shapeType, "sphere") == 0) {
 
+            // Distribute processing of stacks
             GLint stacks_per_node = currentShape.stacks / size;
             GLint start = rank * stacks_per_node;
             GLint end = (rank == size - 1) ? currentShape.stacks : start + stacks_per_node;
 
+            // Process partial sphere
             partialSphere(currentShape.param1, currentShape.slices, start, end, currentShape.stacks, filename);
         }
         else if (strcmp(currentShape.shapeType, "cube") == 0) {
 
+            // Distribute processing of faces
             int faces_per_node = 12 / size;
             int start = rank * faces_per_node;
             int end = (rank == size - 1) ? 12 : start + faces_per_node;
 
+            // Process partial cube
             partialCube(currentShape.param1, start, end, filename);
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
@@ -900,7 +924,14 @@ void process_partial_STL(int rank, int size, const char* input) {
             writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
-            writePyramidToBinarySTL(currentShape.param1,filename);
+
+            int triangles_per_node = 4 / size;
+            int remaining = 4 % size;
+
+            int start = rank * triangles_per_node;
+            int end = (rank == size - 1) ? start + triangles_per_node + remaining : start + triangles_per_node;
+
+            partialPyramid(currentShape.param1, start, end, filename);
         }
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
             writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
@@ -931,10 +962,12 @@ void process_STL(int size) {
             writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
-            writePyramidToBinarySTL(currentShape.param1,filename);
+            writePyramidToBinarySTL(size,filename);
         }
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
             writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
         }
+
+        stl_to_h_file(filename);
     }
 }

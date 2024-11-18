@@ -112,7 +112,7 @@ int main(int argc, char const* argv[])
 
                     process_partial_STL(rank, size, final_msg);
 
-                    MPI_Barrier(MPI_COMM_WORLD);
+                    MPI_Barrier(MPI_COMM_WORLD);    // Waits for all nodes to finish writing the partial STL files
 
                     process_STL(size);
 
