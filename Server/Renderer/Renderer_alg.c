@@ -38,7 +38,6 @@ Shape shapes[MAX_SHAPES];
 int shapeCount = 0;
 
 void parseInput(const char* input) {
-    //printf("%s\n", input);
     const char* ptr = input;
 
     while (ptr != NULL) {
@@ -200,8 +199,6 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
     fclose(file);
 
     appendBytes(size, filename);
-
-    printf("Sphere Binary STL file has been written to %s\n", filename);
 }
 
 void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, GLint total_stacks, const char *filename) {
@@ -301,8 +298,6 @@ void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEn
 
     // Close the file
     fclose(file);
-
-    printf("Partial Sphere Binary STL file has been written to %s\n", filename);
 }
 
 void writeConeToBinarySTL(int size, GLint slices, const char *filename) {
@@ -321,25 +316,15 @@ void writeConeToBinarySTL(int size, GLint slices, const char *filename) {
     uint32_t numTriangles = slices + slices;  // base + side triangles
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
-    appendBytes(size, filename);
-
     fclose(file);
 
-    printf("Cone Binary STL file has been written to %s\n", filename);
+    appendBytes(size, filename);
 }
 
 void partialCone(GLfloat radius, GLfloat height, GLint startSlice1, GLint endSlice1, GLint startSlice2, GLint endSlice2, GLint total_slices, const char* filename) {
     FILE *file = fopen(filename, "wb");
 
     GLfloat halfHeight = height / 2.0f;
-
-    // Write the 80-byte header (can be any data, here we use zeros)
-    char header[80] = {0};
-    fwrite(header, sizeof(char), 80, file);
-
-    // Write the number of triangles (4 bytes, little-endian)
-    uint32_t numTriangles = total_slices + total_slices;  // base + side triangles
-    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
     // 1. Write base triangles
     for (int i = startSlice1; i < endSlice1; ++i) {
@@ -432,8 +417,6 @@ void partialCone(GLfloat radius, GLfloat height, GLint startSlice1, GLint endSli
 
     // Close the file
     fclose(file);
-
-    printf("Partial Cone Binary STL file has been written to %s\n", filename);
 }
 
 void writeCubeToBinarySTL(int size, const char *filename) {
@@ -455,8 +438,6 @@ void writeCubeToBinarySTL(int size, const char *filename) {
     fclose(file);
 
     appendBytes(size, filename);
-
-    printf("Cube Binary STL file has been written to %s\n", filename);
 }
 
 void partialCube(GLfloat sideLength, int faceStart, int faceEnd, const char* filename) {
@@ -528,8 +509,6 @@ void partialCube(GLfloat sideLength, int faceStart, int faceEnd, const char* fil
 
     // Close the file
     fclose(file);
-
-    printf("Partial Cube Binary STL file has been written to %s\n", filename);
 }
 
 void writePyramidToBinarySTL(int size, const char *filename) {
@@ -551,8 +530,6 @@ void writePyramidToBinarySTL(int size, const char *filename) {
     fclose(file);
 
     appendBytes(size, filename);
-
-    printf("Pyramid Binary STL file has been written to %s\n", filename);
 }
 
 void partialPyramid(GLfloat height, int faceStart, int faceEnd, const char* filename) {
@@ -637,8 +614,6 @@ void partialPyramid(GLfloat height, int faceStart, int faceEnd, const char* file
 
     // Close the file
     fclose(file);
-
-    printf("Partial Pyramid Binary STL file has been written to %s\n", filename);
 }
 
 void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename) {
@@ -897,7 +872,7 @@ void stl_to_h_file(const char *filePath) {
     free(mesh.triangles);
     free(mesh.normals);
 
-    printf("Header file '%s' generated successfully.\n", "shapes.h");
+    printf("Header file generated successfully in ../pruebaconect/shapes.h");
 }
 
 void process_partial_STL(int rank, int size, const char* input) {
@@ -960,6 +935,8 @@ void process_partial_STL(int rank, int size, const char* input) {
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
             writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
         }
+
+        printf("Partial %s Binary STL generated successfully in %s", currentShape.shapeType, filename);
     }
 }
 
@@ -993,5 +970,7 @@ void process_STL(int size) {
         }
 
         stl_to_h_file(filename);
+
+        printf("%s Binary STL generated successfully in %s", currentShape.shapeType, filename);
     }
 }
