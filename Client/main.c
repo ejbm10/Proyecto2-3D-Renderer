@@ -52,7 +52,7 @@ int main(int argc, char const* argv[])
     struct RSAKey *key = malloc(sizeof(struct RSAKey));
     sscanf(key_buffer, "%lld,%lld", &key->modulus, &key->exponent);
 
-    printf("Successfully connected!\nPublic key: (%lld, %lld)\n\n", key->modulus, key->exponent);
+    printf("Successfully connected!\nPublic key: (%lld, %lld)\n\nType 'exit' to disconnect\nType 'shutdown' to power off the server\n\n", key->modulus, key->exponent);
     while (active) {
 
         printf("Enter message: ");

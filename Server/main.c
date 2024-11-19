@@ -97,6 +97,7 @@ int main(int argc, char const* argv[])
                 }
 
                 else if (strcmp(final_msg, "shutdown") == 0) {
+                    printf("Shutting down...");
                     close(client_fd);
                     active = 0;
                     if (size > 1) MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
