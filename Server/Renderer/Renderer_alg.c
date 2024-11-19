@@ -305,7 +305,7 @@ void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEn
     printf("Partial Sphere Binary STL file has been written to %s\n", filename);
 }
 
-void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename) {
+void writeConeToBinarySTL(int size, GLint slices, const char *filename) {
     // Open the file for binary writing
     FILE *file = fopen(filename, "wb");
     if (!file) {
@@ -321,12 +321,30 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     uint32_t numTriangles = slices + slices;  // base + side triangles
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    appendBytes(size, filename);
+
+    fclose(file);
+
+    printf("Cone Binary STL file has been written to %s\n", filename);
+}
+
+void partialCone(GLfloat radius, GLfloat height, GLint startSlice1, GLint endSlice1, GLint startSlice2, GLint endSlice2, GLint total_slices, const char* filename) {
+    FILE *file = fopen(filename, "wb");
+
     GLfloat halfHeight = height / 2.0f;
 
+    // Write the 80-byte header (can be any data, here we use zeros)
+    char header[80] = {0};
+    fwrite(header, sizeof(char), 80, file);
+
+    // Write the number of triangles (4 bytes, little-endian)
+    uint32_t numTriangles = total_slices + total_slices;  // base + side triangles
+    fwrite(&numTriangles, sizeof(uint32_t), 1, file);
+
     // 1. Write base triangles
-    for (int i = 0; i < slices; ++i) {
-        GLfloat angle1 = 2.0f * M_PI * i / slices;
-        GLfloat angle2 = 2.0f * M_PI * (i + 1) / slices;
+    for (int i = startSlice1; i < endSlice1; ++i) {
+        GLfloat angle1 = 2.0f * M_PI * i / total_slices;
+        GLfloat angle2 = 2.0f * M_PI * (i + 1) / total_slices;
 
         // Vertices of the triangle on the base
         GLfloat x1 = radius * cos(angle1);
@@ -363,9 +381,9 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     }
 
     // 2. Write side triangles
-    for (int i = 0; i < slices; ++i) {
-        GLfloat angle1 = 2.0f * M_PI * i / slices;
-        GLfloat angle2 = 2.0f * M_PI * (i + 1) / slices;
+    for (int i = startSlice2; i < endSlice2; ++i) {
+        GLfloat angle1 = 2.0f * M_PI * i / total_slices;
+        GLfloat angle2 = 2.0f * M_PI * (i + 1) / total_slices;
 
         // Vertices of the triangle on the side
         GLfloat x1 = radius * cos(angle1);
@@ -415,9 +433,7 @@ void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const ch
     // Close the file
     fclose(file);
 
-    printf("Cone Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-    //mergeSTLFiles();
+    printf("Partial Cone Binary STL file has been written to %s\n", filename);
 }
 
 void writeCubeToBinarySTL(int size, const char *filename) {
@@ -921,7 +937,15 @@ void process_partial_STL(int rank, int size, const char* input) {
             writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "cone") == 0) {
-            writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+
+            int slices_per_node = 2 * currentShape.slices / size;
+            int start1 = rank * slices_per_node;
+            int end1 = (start1 + slices_per_node > currentShape.slices) ? currentShape.slices : start1 + slices_per_node;
+            int remaining = slices_per_node - end1 + start1;
+            int start2 = (rank * slices_per_node + remaining) % currentShape.slices;
+            int end2 = (remaining == 0) ? -1 : ((rank == size - 1) ? currentShape.slices : start2 + slices_per_node - remaining);
+
+            partialCone(currentShape.param1, currentShape.param2, start1, end1, start2, end2, currentShape.slices, filename);
         }
         else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
 
@@ -959,7 +983,7 @@ void process_STL(int size) {
             writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "cone") == 0) {
-            writeConeToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+            writeConeToBinarySTL(size, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "pyramid") == 0) {
             writePyramidToBinarySTL(size,filename);

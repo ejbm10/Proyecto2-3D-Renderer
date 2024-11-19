@@ -17,7 +17,7 @@ typedef struct {
 void parseInput(const char* input);
 void writeCubeToBinarySTL(int size, const char *filename);
 void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *filename);
-void writeConeToBinarySTL(GLfloat radius, GLfloat height, GLint slices, const char *filename);
+void writeConeToBinarySTL(int size, GLint slices, const char *filename);
 void writePyramidToBinarySTL(int size, const char *filename);
 void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename);
 void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat normal[3]);
