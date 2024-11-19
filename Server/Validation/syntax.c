@@ -19,7 +19,8 @@ const char* errorMessages[] = {
     "\033[1;31mcube only admits\n\nside\n\n\033[0m\n",
     "\033[1;31mpyramid only admits\n\nheight\n\n\033[0m\n",
     "only admits\n\nradius\nheight\n\n\033[0m\n",
-    "\033[1;31mPrism only admits\n\nradius\nlength\nsides\n\n\033[0m\n"
+    "\033[1;31mPrism only admits\n\nradius\nlength\nsides\n\n\033[0m\n",
+    "\033[1;31mSides value should be between 3 and 20\033[0m\n"
 };
 
 // Function to split a string by a given delimiter
@@ -72,9 +73,16 @@ int validate_param_value(char* cmd, char* buff_tok) {
 
     double converted_value;
     if ((converted_value = atof(value))) {
-        if (converted_value < 0.1 || converted_value > 6.0) {
-            printf("%s", errorMessages[7]);
-            return 0;
+        if (strcmp(key, "-side") == 0) {
+            if (converted_value < 2.0 || converted_value > 20.0) {
+                printf("%s", errorMessages[14]);
+                return 0;
+            }
+        } else {
+            if (converted_value < 0.1 || converted_value > 6.0) {
+                printf("%s", errorMessages[7]);
+                return 0;
+            }
         }
     } else {
         printf("%s", errorMessages[8]);
