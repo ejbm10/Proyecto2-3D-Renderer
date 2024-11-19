@@ -23,7 +23,13 @@ const char* errorMessages[] = {
     "\033[1;31mSides value should be between 3 and 20\033[0m\n"
 };
 
-// Function to split a string by a given delimiter
+/**
+ * Function to split a string by a given delimiter
+ * @param str Original string
+ * @param delimiter Delimiter
+ * @param count number of substrings
+ * @return the array of substrings
+ */
 char **split_string(const char *str, char delimiter, int *count) {
     char **result = NULL;
     int substr_count = 0;
@@ -54,7 +60,11 @@ char **split_string(const char *str, char delimiter, int *count) {
     return result;
 }
 
-// Function to free the array of substrings
+/**
+ * Function to free substrings after tokenizing
+ * @param substrings a list containing all substrings
+ * @param count number of subtrings
+ */
 void free_split_string(char **substrings, int count) {
     for (int i = 0; i < count; i++) {
         free(substrings[i]);
@@ -62,6 +72,15 @@ void free_split_string(char **substrings, int count) {
     free(substrings);
 }
 
+/**
+ * Validates the value of each param and if param belongs to the figure.\n
+ * This value should be between 0 and 6.
+ * If param is sides for the prism, its value should be between 3 and 20
+ * @param cmd Figure to process
+ * @param buff_tok The params of the figure
+ * @return 1 for valid. 0 for invalid
+ * @author Eduardo Bolivar Minguet
+ */
 int validate_param_value(char* cmd, char* buff_tok) {
     char* key = strtok(buff_tok, "=");
     char* value = strtok(NULL, "=");
@@ -113,6 +132,12 @@ int validate_param_value(char* cmd, char* buff_tok) {
     return 1;
 }
 
+/**
+ * Validates the figure type and if parameters corresponds the given the figure
+ * @param buffer The instruction message
+ * @return 1 for valid. 0 for invalid
+ * @author Eduardo Bolivar Minguet
+ */
 int validate_params(char* buffer) {
     int count;
     char **parameters = split_string(buffer, ' ', &count);
@@ -170,6 +195,12 @@ int validate_params(char* buffer) {
     return 1;
 }
 
+/**
+ * This function validates if Client message is a valid instruction for processing
+ * @param buffer The instruction message
+ * @return 1 for valid instruction. 0 for invalid instruction
+ * @author Eduardo Bolivar Minguet
+ */
 int validate_instruction(char* buffer) {
     int count, validFlag = 0;
     char **instructions = split_string(buffer, '&', &count);

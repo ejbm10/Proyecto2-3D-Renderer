@@ -8,19 +8,21 @@
 #include <mpi/mpi.h>
 #include <time.h>
 #include "Renderer/Renderer_alg.h"
-#include "GL/glut.h"
 #include "Validation/syntax.h"
-
 #include "biblioteca.h"
 
 #define PORT 8080
 
 int server_fd, client_fd;
-
 struct sockaddr_in address;
 int opt = 1;
 int addrlen = sizeof(address);
 
+/**
+ * Initializes the Socket Server and begins listening for clients.
+ * @return Status of initialization
+ * @author Eduardo Bolivar Minguet
+ */
 int init_server() {
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Socket failed");
@@ -48,6 +50,24 @@ int init_server() {
     return 0;
 }
 
+/**
+ * Main function that initializes the socket server and OpenMPI for message passing.\n
+ * ------------------------ Master node ----------------------------\n
+ * Here the public and private keys for encryptation are generated.\n
+ * Public key is sent to Client for encrypting messages.\n
+ * Private key is used by Server for decrypting Client messages.\n
+ * Encrypted message (if valid) to all slaves nodes via MPI.\n
+ * Process partial file.\n
+ * Process final file when all slave nodes are done.\n
+ * ---------------------------- Slave nodes -----------------------\n
+ * Receives the encrypted message sent by master.\n
+ * Decrypts message using private key.\n
+ * Process partial file.\n
+ * @param argc Number of terminal arguments
+ * @param argv Terminal arguments
+ * @return Exit status
+ * @authors Eduardo Bolivar Minguet, Michael Valverde, Max Garro, Naheem Johnson
+ */
 int main(int argc, char const* argv[])
 {
     MPI_Init(&argc, &argv);
@@ -61,6 +81,7 @@ int main(int argc, char const* argv[])
 
     struct RSAKeyPair *keys = generate_keys();
 
+    // Master code
     if (rank == 0) {
 
         char buffer[1024];
@@ -138,6 +159,7 @@ int main(int argc, char const* argv[])
         }
         close(server_fd);
     }
+    // Slave code
     else {
         int active = 1;
 

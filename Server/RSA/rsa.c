@@ -7,6 +7,13 @@
 #include <stdlib.h>
 #include <time.h>
 
+/**
+ * Calculates the power of b**e
+ * @param b base of power
+ * @param e exponent
+ * @return the result of power
+ * @author Eduardo Bolivar Minguet
+ */
 int power(int b, int e) {
     if (e == 0) {
         return 1;
@@ -14,6 +21,12 @@ int power(int b, int e) {
     return b * power(b, e - 1);
 }
 
+/**
+ * Verifies if a number is prime
+ * @param num The specified number
+ * @param i_num Iterative value of the number
+ * @return 1 if prime. 0 if not prime.
+ */
 int is_prime(int const num, int const i_num) {
     if (i_num <= 1) {
         return 1;
@@ -23,6 +36,13 @@ int is_prime(int const num, int const i_num) {
     return is_prime(num, i_num - 1);
 }
 
+/**
+ * Verifies if number a is coprime to number b
+ * @param a The specified number a
+ * @param b The specified number b
+ * @return 1 if coprime. 0 if not coprime.
+ * @author Eduardo Bolivar Minguet
+ */
 int is_coprime(long long a, long long b) {
     while (b != 0) {
         long long temp = b;
@@ -32,6 +52,11 @@ int is_coprime(long long a, long long b) {
     return a == 1 ? 1 : 0;
 }
 
+/**
+ * Converts an ASCII-represented message to its original form.
+ * @param num The ASCII-represented message
+ * @return The original message
+ */
 char* ASCIIToMessage(unsigned long long num) {
     int length = 0;
     unsigned long long tmp = num;
@@ -55,6 +80,12 @@ char* ASCIIToMessage(unsigned long long num) {
     return message;
 }
 
+/**
+ * Generate a random prime number of specified bits
+ * @param bits The number of bits the random number should be
+ * @return the prime number
+ * @author Eduardo Bolivar Minguet
+ */
 long long generate_prime(int const bits) {
     int const low_bound = power(2, bits-1);
     int const high_bound = power(2, bits);
@@ -68,6 +99,12 @@ long long generate_prime(int const bits) {
     return n_rand;
 }
 
+/**
+ * Generates a random number that is coprime to number n
+ * @param n The specified number
+ * @return The random coprime to n
+ * @author Eduardo Bolvar Minguet
+ */
 long long generate_coprime(long long n) {
     long long e;
     do {
@@ -76,8 +113,14 @@ long long generate_coprime(long long n) {
     return e;
 }
 
-// Function to perform the Extended Euclidean Algorithm
-// It returns the gcd of a and b, and finds x and y such that ax + by = gcd(a, b)
+/**
+ * Function that calculates the Greatest Common Divisor
+ * @param a The first number
+ * @param b The second number
+ * @param x Temporal value
+ * @param y Temporal value
+ * @return The greatest common divisor
+ */
 long long extended_gcd(long long a, long long b, long long *x, long long *y) {
     if (b == 0) {
         *x = 1;
@@ -91,7 +134,12 @@ long long extended_gcd(long long a, long long b, long long *x, long long *y) {
     return gcd;
 }
 
-// Function to calculate modular inverse of e mod phi
+/**
+ * Function that calculates the mod inverse between two numbers
+ * @param e First number
+ * @param phi Second number
+ * @return The mod inverse
+ */
 long long mod_inverse(long long e, long long phi) {
     long long x, y;
     long long gcd = extended_gcd(e, phi, &x, &y);
@@ -103,6 +151,11 @@ long long mod_inverse(long long e, long long phi) {
     return (x % phi + phi) % phi;
 }
 
+/**
+ * Generates the public and private keys following the RSA specifications
+ * @return A struct containing the key pair
+ * @author Eduardo Bolivar Minguet
+ */
 struct RSAKeyPair* generate_keys() {
     const long long p = generate_prime(16);
     const long long q = generate_prime(16);
@@ -127,6 +180,12 @@ struct RSAKeyPair* generate_keys() {
     return keys;
 }
 
+/**
+ * Decryption of a message using the private RSA key
+ * @param ciphertext the encrypted message
+ * @param private_key Private key used for decrypting
+ * @return The decrypted ASCII-represented message
+ */
 unsigned long long rsa_decrypt(unsigned long long ciphertext, const struct RSAKey *private_key) {
     unsigned long long result = 1;
     unsigned long long mod = private_key->modulus;

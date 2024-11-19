@@ -7,6 +7,15 @@
 #include "rsa.h"
 #include <string.h>
 
+/**
+ * Converts a block of message to its ASCII representation.
+ * Block size should not exceed the modulus of the encrypting key
+ * @param str The original message
+ * @param block The block the message belongs to
+ * @param key the public key used for encrypting
+ * @return The ASCII representation of the message
+ * @author Eduardo Bolivar Minguet
+ */
 unsigned long long messageToASCII(const char *str, int block, struct RSAKey *key) {
     unsigned long long ascii_num = 0, previous_ascii_num = 0;
     size_t len = strlen(str);
@@ -31,6 +40,13 @@ unsigned long long messageToASCII(const char *str, int block, struct RSAKey *key
     return (block == -1) ? current_block + 1 : ascii_num;
 }
 
+/**
+ * It encrypts the ASCII message using the RSA public key
+ * @param message The ASCII message without encryptation
+ * @param public_key THe public key used for encrypting
+ * @return The encrypted message
+ * @author Eduardo Bolivar Minguet
+ */
 unsigned long long rsa_encrypt(unsigned long long message, const struct RSAKey *public_key) {
     unsigned long long result = 1;
     unsigned long long mod = public_key->modulus;

@@ -16,6 +16,11 @@ char input_buffer[1024];
 char msg_buffer[1024];
 char block_buffer[1024];
 
+/**
+ * Initialize the socket client and connects to local Socket Server
+ * @return Status of connection
+ * @author Eduardo Bolivar Minguet
+ */
 int init_client() {
     if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("\n Socket creation error \n");
@@ -38,6 +43,15 @@ int init_client() {
     return 0;
 }
 
+/**
+ * Main Client function which initializes client and establish connection
+ * Receives the public key used for encrypting messages
+ * @param argc Never used
+ * @param argv Never used
+ * @return Exit status
+ * @author Eduardo Bolivar Minguet
+ * @see init_client
+ */
 int main(int argc, char const* argv[])
 {
     int active = 1;
