@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "Renderer_alg.h"
-#include "STL_file_handler.h"
 #include "STL_to_h_converter.h"
 
 #define MAX_SHAPES 10
@@ -1086,7 +1085,7 @@ void process_STL(int size) {
 
         printf("%s binary STL generated successfully in %s\n", currentShape.shapeType, filename);
 
-        stl_to_h_file(filename);
+        //stl_to_h_file(filename);
     }
 }
 

@@ -57,10 +57,10 @@ RM = /snap/clion/296/bin/cmake/linux/x64/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server
+CMAKE_SOURCE_DIR = /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug
+CMAKE_BINARY_DIR = /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -177,30 +177,6 @@ Renderer/Renderer_alg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/Renderer_alg.c.s
 .PHONY : Renderer/Renderer_alg.c.s
 
-Renderer/STL_file_handler.o: Renderer/STL_file_handler.c.o
-.PHONY : Renderer/STL_file_handler.o
-
-# target to build an object file
-Renderer/STL_file_handler.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.o
-.PHONY : Renderer/STL_file_handler.c.o
-
-Renderer/STL_file_handler.i: Renderer/STL_file_handler.c.i
-.PHONY : Renderer/STL_file_handler.i
-
-# target to preprocess a source file
-Renderer/STL_file_handler.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.i
-.PHONY : Renderer/STL_file_handler.c.i
-
-Renderer/STL_file_handler.s: Renderer/STL_file_handler.c.s
-.PHONY : Renderer/STL_file_handler.s
-
-# target to generate assembly for a file
-Renderer/STL_file_handler.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_file_handler.c.s
-.PHONY : Renderer/STL_file_handler.c.s
-
 Renderer/STL_to_h_converter.o: Renderer/STL_to_h_converter.c.o
 .PHONY : Renderer/STL_to_h_converter.o
 
@@ -224,6 +200,30 @@ Renderer/STL_to_h_converter.s: Renderer/STL_to_h_converter.c.s
 Renderer/STL_to_h_converter.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/STL_to_h_converter.c.s
 .PHONY : Renderer/STL_to_h_converter.c.s
+
+Renderer/stl_merger.o: Renderer/stl_merger.c.o
+.PHONY : Renderer/stl_merger.o
+
+# target to build an object file
+Renderer/stl_merger.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/stl_merger.c.o
+.PHONY : Renderer/stl_merger.c.o
+
+Renderer/stl_merger.i: Renderer/stl_merger.c.i
+.PHONY : Renderer/stl_merger.i
+
+# target to preprocess a source file
+Renderer/stl_merger.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/stl_merger.c.i
+.PHONY : Renderer/stl_merger.c.i
+
+Renderer/stl_merger.s: Renderer/stl_merger.c.s
+.PHONY : Renderer/stl_merger.s
+
+# target to generate assembly for a file
+Renderer/stl_merger.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Server.dir/build.make CMakeFiles/Server.dir/Renderer/stl_merger.c.s
+.PHONY : Renderer/stl_merger.c.s
 
 Validation/syntax.o: Validation/syntax.c.o
 .PHONY : Validation/syntax.o
@@ -312,12 +312,12 @@ help:
 	@echo "... Renderer/Renderer_alg.o"
 	@echo "... Renderer/Renderer_alg.i"
 	@echo "... Renderer/Renderer_alg.s"
-	@echo "... Renderer/STL_file_handler.o"
-	@echo "... Renderer/STL_file_handler.i"
-	@echo "... Renderer/STL_file_handler.s"
 	@echo "... Renderer/STL_to_h_converter.o"
 	@echo "... Renderer/STL_to_h_converter.i"
 	@echo "... Renderer/STL_to_h_converter.s"
+	@echo "... Renderer/stl_merger.o"
+	@echo "... Renderer/stl_merger.i"
+	@echo "... Renderer/stl_merger.s"
 	@echo "... Validation/syntax.o"
 	@echo "... Validation/syntax.i"
 	@echo "... Validation/syntax.s"

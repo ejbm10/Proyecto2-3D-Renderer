@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug"
+			"value" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -415,7 +415,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -475,7 +475,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server"
+			"value" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1879,7 +1879,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/cmake-build-debug"
+			"value" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server/cmake-build-debug"
 		},
 		{
 			"name" : "Server_IS_TOP_LEVEL",
@@ -1903,7 +1903,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server"
+			"value" : "/home/max-garro/Documents/p2/Proyecto2-3D-Renderer/Server"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

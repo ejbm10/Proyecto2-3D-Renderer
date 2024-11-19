@@ -68,7 +68,7 @@ int init_server() {
  * @return Exit status
  * @authors Eduardo Bolivar Minguet, Michael Valverde, Max Garro, Naheem Johnson
  */
-int main(int argc, char const* argv[])
+int main(int argc, char * argv[])
 {
     MPI_Init(&argc, &argv);
 
@@ -133,7 +133,7 @@ int main(int argc, char const* argv[])
 
                     MPI_Barrier(MPI_COMM_WORLD);    // Waits for all nodes to finish writing the partial STL files
 
-                    process_STL(size);
+                    process_STL(size); //Enviar figura
 
                     send_serial(); //Enviar al Hardware
 
