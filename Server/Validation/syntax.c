@@ -73,7 +73,7 @@ int validate_param_value(char* cmd, char* buff_tok) {
 
     double converted_value;
     if ((converted_value = atof(value))) {
-        if (strcmp(key, "-side") == 0) {
+        if (strcmp(key, "-sides") == 0) {
             if (converted_value < 2.0 || converted_value > 20.0) {
                 printf("%s", errorMessages[14]);
                 return 0;
