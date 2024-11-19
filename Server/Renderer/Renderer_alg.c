@@ -884,6 +884,41 @@ void stl_to_h_file(const char *filePath) {
     printf("Header file generated successfully in ../pruebaconect/shapes.h\n");
 }
 
+void compute_workload(int rank, int size, int n, int *start1, int *end1, int *start2, int *end2, int *start3, int *end3) {
+    int total_work = 3 * n; // Total iterations across all loops
+    int workload_per_node = total_work / size;
+    int extra_work = total_work % size; // Extra work to distribute
+
+    int my_workload = workload_per_node + (rank < extra_work ? 1 : 0); // Extra work for first 'extra_work' nodes
+
+    // Initialize start and end indices
+    *start1 = *end1 = *start2 = *end2 = *start3 = *end3 = 0;
+
+    int current_start = 0; // Tracks the start of unassigned work
+
+    // Assign work to Loop 1
+    if (current_start < n) {
+        *start1 = current_start;
+        *end1 = (*start1 + my_workload > n) ? n : *start1 + my_workload;
+        my_workload -= (*end1 - *start1);
+        current_start = *end1;
+    }
+
+    // Assign work to Loop 2
+    if (my_workload > 0 && current_start < 2 * n) {
+        *start2 = current_start - n; // Offset to Loop 2's index range
+        *end2 = (*start2 + my_workload > n) ? n : *start2 + my_workload;
+        my_workload -= (*end2 - *start2);
+        current_start = n + *end2;
+    }
+
+    // Assign work to Loop 3
+    if (my_workload > 0 && current_start < 3 * n) {
+        *start3 = current_start - 2 * n; // Offset to Loop 3's index range
+        *end3 = (*start3 + my_workload > n) ? n : *start3 + my_workload;
+    }
+}
+
 void process_partial_STL(int rank, int size, const char* input) {
     parseInput(input);  // Parse the input string
 
@@ -919,17 +954,11 @@ void process_partial_STL(int rank, int size, const char* input) {
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
 
-            int slices_per_node = 3 * currentShape.slices / size; // 30
-            int remaining_slices = slices_per_node; // 30
-
-            int start1 = rank * slices_per_node;    // 60
-            int end1 = (start1 + slices_per_node > currentShape.slices) ? currentShape.slices : start1 + slices_per_node;      // 30
-            remaining_slices = (end1 < start1) ? remaining_slices : remaining_slices - end1 + start1;  // 30
-            int start2 = (rank != 2) ? (rank * remaining_slices) % currentShape.slices : rank * remaining_slices;   // 0
-            int end2 = (remaining_slices > currentShape.slices) ? currentShape.slices : (start2 + slices_per_node > remaining_slices) ? remaining_slices : start2 + slices_per_node;
-            remaining_slices -= (end2 - start2); //0
-            int start3 = 0;
-            int end3 = (remaining_slices == 0) ? 0 : (rank == size - 1) ? currentShape.slices : start3 + remaining_slices;  // 0
+            int start1, end1, start2, end2, start3, end3;
+            compute_workload(rank, size, currentShape.slices, &start1, &end1, &start2, &end2, &start3, &end3);
+            printf("Node %d: start1: %d, end1: %d\n", rank, start1, end1);
+            printf("Node %d: start2: %d, end2: %d\n", rank, start2, end2);
+            printf("Node %d: start3: %d, end3: %d\n", rank, start3, end3);
 
             partialCylinder(currentShape.param1, currentShape.param2, start1, end1, start2, end2, start3, end3, currentShape.slices, filename);
         }
@@ -956,17 +985,17 @@ void process_partial_STL(int rank, int size, const char* input) {
         }
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
 
-            int n_per_node = 3 * currentShape.n / size; // 30
-            int remaining_n = n_per_node; // 30
+            int n_per_node = 3 * currentShape.n / size;
+            int remaining_n = n_per_node;
 
-            int start1 = rank * n_per_node;    // 60
-            int end1 = (start1 + n_per_node > currentShape.n) ? currentShape.n : start1 + n_per_node;      // 30
-            remaining_n = (end1 < start1) ? remaining_n : remaining_n - end1 + start1;  // 30
-            int start2 = (rank != 2) ? (rank * remaining_n) % currentShape.n : rank * remaining_n;   // 0
+            int start1 = rank * n_per_node;
+            int end1 = (start1 + n_per_node > currentShape.n) ? currentShape.n : start1 + n_per_node;
+            remaining_n = (end1 < start1) ? remaining_n : remaining_n - end1 + start1;
+            int start2 = (rank != 2) ? (rank * remaining_n) % currentShape.n : rank * remaining_n;
             int end2 = (remaining_n > currentShape.n) ? currentShape.n : (start2 + n_per_node > remaining_n) ? remaining_n : start2 + n_per_node;
-            remaining_n -= (end2 - start2); //0
+            remaining_n -= (end2 - start2);
             int start3 = 0;
-            int end3 = (remaining_n == 0) ? 0 : (rank == size - 1) ? currentShape.n : start3 + remaining_n;  // 0
+            int end3 = (remaining_n == 0) ? 0 : (rank == size - 1) ? currentShape.n : start3 + remaining_n;
 
             partialPrism(currentShape.param1, currentShape.param2, start1, end1, start2, end2, start3, end3, currentShape.n,filename);
         }
@@ -1004,8 +1033,15 @@ void process_STL(int size) {
             writePrismToBinarySTL(size, currentShape.n,filename);
         }
 
-        stl_to_h_file(filename);
-
         printf("%s binary STL generated successfully in %s\n", currentShape.shapeType, filename);
+
+        stl_to_h_file(filename);
     }
+
+    printf("%d\n", shapeCount);
+}
+
+void clearFigures() {
+    memset(shapes, 0, sizeof(shapes));
+    shapeCount = 0;
 }

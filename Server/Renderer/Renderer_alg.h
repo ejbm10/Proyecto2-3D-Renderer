@@ -25,5 +25,6 @@ void writePrismToBinarySTL(int size, int n, const char *filename);
 void stl_to_h_file(const char *filePath);
 void process_partial_STL(int rank, int size, const char* input);
 void process_STL(int size);
+void clearFigures();
 
 #endif //RENDERER_ALG_H

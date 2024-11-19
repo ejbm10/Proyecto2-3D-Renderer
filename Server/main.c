@@ -114,6 +114,8 @@ int main(int argc, char const* argv[])
                     process_STL(size);
 
                     send_serial(); //Enviar al Hardware
+
+                    clearFigures(); // Limpia el array de figuras para una nueva instruccion
                 }
 
                 memset(buffer, 0, sizeof(buffer));
