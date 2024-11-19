@@ -118,7 +118,7 @@ int main(int argc, char * argv[])
                 }
 
                 else if (strcmp(final_msg, "shutdown") == 0) {
-                    printf("Shutting down...");
+                    printf("Shutting down...\n");
                     close(client_fd);
                     active = 0;
                     if (size > 1) MPI_Bcast(buffer, sizeof(buffer), MPI_CHAR, 0, MPI_COMM_WORLD);
@@ -181,6 +181,8 @@ int main(int argc, char * argv[])
                 process_partial_STL(rank, size, final_msg);
 
                 MPI_Barrier(MPI_COMM_WORLD);
+
+                clearFigures();
             }
         }
     }
