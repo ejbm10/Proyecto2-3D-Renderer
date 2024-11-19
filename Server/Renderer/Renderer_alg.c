@@ -887,26 +887,25 @@ void stl_to_h_file(const char *filePath) {
 void compute_workload(int rank, int size, int n, int *start1, int *end1, int *start2, int *end2, int *start3, int *end3) {
     int total_work = 3 * n; // Total iterations across all loops
     int workload_per_node = total_work / size;
-    int extra_work = total_work % size; // Extra work to distribute
+    int extra_work = total_work % size; // Extra work to distribute among the first few nodes
 
-    int my_workload = workload_per_node + (rank < extra_work ? 1 : 0); // Extra work for first 'extra_work' nodes
+    int my_workload = workload_per_node + (rank < extra_work ? 1 : 0); // Each node gets its fair share
+    int current_start = rank * workload_per_node + (rank < extra_work ? rank : extra_work);
 
-    // Initialize start and end indices
+    // Initialize ranges
     *start1 = *end1 = *start2 = *end2 = *start3 = *end3 = 0;
-
-    int current_start = 0; // Tracks the start of unassigned work
 
     // Assign work to Loop 1
     if (current_start < n) {
         *start1 = current_start;
-        *end1 = (*start1 + my_workload > n) ? n : *start1 + my_workload;
+        *end1 = (current_start + my_workload > n) ? n : current_start + my_workload;
         my_workload -= (*end1 - *start1);
         current_start = *end1;
     }
 
     // Assign work to Loop 2
     if (my_workload > 0 && current_start < 2 * n) {
-        *start2 = current_start - n; // Offset to Loop 2's index range
+        *start2 = current_start - n; // Offset for Loop 2
         *end2 = (*start2 + my_workload > n) ? n : *start2 + my_workload;
         my_workload -= (*end2 - *start2);
         current_start = n + *end2;
@@ -914,7 +913,7 @@ void compute_workload(int rank, int size, int n, int *start1, int *end1, int *st
 
     // Assign work to Loop 3
     if (my_workload > 0 && current_start < 3 * n) {
-        *start3 = current_start - 2 * n; // Offset to Loop 3's index range
+        *start3 = current_start - 2 * n; // Offset for Loop 3
         *end3 = (*start3 + my_workload > n) ? n : *start3 + my_workload;
     }
 }
