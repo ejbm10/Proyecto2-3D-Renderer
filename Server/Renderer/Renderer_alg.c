@@ -616,7 +616,7 @@ void partialPyramid(GLfloat height, int faceStart, int faceEnd, const char* file
     fclose(file);
 }
 
-void writeCylinderToBinarySTL(float radius, float length, int n, const char *filename) {
+void writeCylinderToBinarySTL(int size, int n, const char *filename) {
     FILE *file = fopen(filename, "wb");
     if (!file) {
         printf("Error: Unable to open file for writing.\n");
@@ -631,15 +631,23 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     uint32_t numTriangles = n * 2 + n + n;
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    fclose(file);
+
+    appendBytes(size, filename);
+}
+
+void partialCylinder(float radius, float length, int start1N, int end1N, int start2N, int end2N, int start3N, int end3N,  int totalN, const char *filename) {
+    FILE *file = fopen(filename, "wb");
+
     // Angle increment for each side of the polygon
-    float angleIncrement = 2 * M_PI / n;
+    float angleIncrement = 2 * M_PI / totalN;
 
     // Vertices for the prism
     GLfloat topCenter[3] = {0.0f, 0.0f, length};   // Top center vertex
     GLfloat bottomCenter[3] = {0.0f, 0.0f, 0.0f};  // Bottom center vertex
 
     // Side faces (Each side face is composed of 2 triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start1N; i < end1N; i++) {
         // Calculate the angle for the current side
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
@@ -675,7 +683,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     }
 
     // Top face (n triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start2N; i < end2N; i++) {
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
 
@@ -699,7 +707,7 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
     }
 
     // Bottom face (n triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start3N; i < end3N; i++) {
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
 
@@ -724,9 +732,6 @@ void writeCylinderToBinarySTL(float radius, float length, int n, const char *fil
 
     // Close the file
     fclose(file);
-    printf("Cylinder Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-    //mergeSTLFiles();
 }
 
 void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat normal[3]) {
@@ -748,7 +753,7 @@ void calculateNormalPrism(GLfloat v1[3], GLfloat v2[3], GLfloat v3[3], GLfloat n
 
 
 // Function to write the prism's geometry to a binary STL file
-void writePrismToBinarySTL(float radius, float length, int n, const char *filename) {
+void writePrismToBinarySTL(int size, int n, const char *filename) {
     FILE *file = fopen(filename, "wb");
     if (!file) {
         printf("Error: Unable to open file for writing.\n");
@@ -763,15 +768,23 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     uint32_t numTriangles = n * 2 + n + n;
     fwrite(&numTriangles, sizeof(uint32_t), 1, file);
 
+    fclose(file);
+
+    appendBytes(size, filename);
+}
+
+void partialPrism(float radius, float length, int start1N, int end1N, int start2N, int end2N, int start3N, int end3N, int total_n, const char* filename) {
+    FILE *file = fopen(filename, "wb");
+
     // Angle increment for each side of the polygon
-    float angleIncrement = 2 * M_PI / n;
+    float angleIncrement = 2 * M_PI / total_n;
 
     // Vertices for the prism
     GLfloat topCenter[3] = {0.0f, 0.0f, length};   // Top center vertex
     GLfloat bottomCenter[3] = {0.0f, 0.0f, 0.0f};  // Bottom center vertex
 
     // Side faces (Each side face is composed of 2 triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start1N; i < end1N; i++) {
         // Calculate the angle for the current side
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
@@ -807,7 +820,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     }
 
     // Top face (n triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start2N; i < end2N; i++) {
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
 
@@ -831,7 +844,7 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
     }
 
     // Bottom face (n triangles)
-    for (int i = 0; i < n; i++) {
+    for (int i = start3N; i < end3N; i++) {
         float angle1 = i * angleIncrement;
         float angle2 = (i + 1) * angleIncrement;
 
@@ -856,10 +869,6 @@ void writePrismToBinarySTL(float radius, float length, int n, const char *filena
 
     // Close the file
     fclose(file);
-    printf("Prism Binary STL file has been written to %s\n", filename);
-    stl_to_h_file(filename);
-
-    //mergeSTLFiles();
 }
 
 void stl_to_h_file(const char *filePath) {
@@ -881,9 +890,9 @@ void process_partial_STL(int rank, int size, const char* input) {
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
 
-        const char filename[50];
+        char filename[100];
         snprintf(filename, sizeof(filename), "../Resources/partial_binary_%d.stl", rank);  // Output binary STL file
-        const char create[50];
+        char create[1024];
         snprintf(create, sizeof(create), "touch %s", filename);
         system(create);
 
@@ -909,7 +918,20 @@ void process_partial_STL(int rank, int size, const char* input) {
             partialCube(currentShape.param1, start, end, filename);
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
-            writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+
+            int slices_per_node = 3 * currentShape.slices / size; // 30
+            int remaining_slices = slices_per_node; // 30
+
+            int start1 = rank * slices_per_node;    // 60
+            int end1 = (start1 + slices_per_node > currentShape.slices) ? currentShape.slices : start1 + slices_per_node;      // 30
+            remaining_slices = (end1 < start1) ? remaining_slices : remaining_slices - end1 + start1;  // 30
+            int start2 = (rank != 2) ? (rank * remaining_slices) % currentShape.slices : rank * remaining_slices;   // 0
+            int end2 = (remaining_slices > currentShape.slices) ? currentShape.slices : (start2 + slices_per_node > remaining_slices) ? remaining_slices : start2 + slices_per_node;
+            remaining_slices -= (end2 - start2); //0
+            int start3 = 0;
+            int end3 = (remaining_slices == 0) ? 0 : (rank == size - 1) ? currentShape.slices : start3 + remaining_slices;  // 0
+
+            partialCylinder(currentShape.param1, currentShape.param2, start1, end1, start2, end2, start3, end3, currentShape.slices, filename);
         }
         else if (strcmp(currentShape.shapeType, "cone") == 0) {
 
@@ -933,10 +955,23 @@ void process_partial_STL(int rank, int size, const char* input) {
             partialPyramid(currentShape.param1, start, end, filename);
         }
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
-            writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+
+            int n_per_node = 3 * currentShape.n / size; // 30
+            int remaining_n = n_per_node; // 30
+
+            int start1 = rank * n_per_node;    // 60
+            int end1 = (start1 + n_per_node > currentShape.n) ? currentShape.n : start1 + n_per_node;      // 30
+            remaining_n = (end1 < start1) ? remaining_n : remaining_n - end1 + start1;  // 30
+            int start2 = (rank != 2) ? (rank * remaining_n) % currentShape.n : rank * remaining_n;   // 0
+            int end2 = (remaining_n > currentShape.n) ? currentShape.n : (start2 + n_per_node > remaining_n) ? remaining_n : start2 + n_per_node;
+            remaining_n -= (end2 - start2); //0
+            int start3 = 0;
+            int end3 = (remaining_n == 0) ? 0 : (rank == size - 1) ? currentShape.n : start3 + remaining_n;  // 0
+
+            partialPrism(currentShape.param1, currentShape.param2, start1, end1, start2, end2, start3, end3, currentShape.n,filename);
         }
 
-        printf("Partial %s Binary STL generated successfully in %s\n", currentShape.shapeType, filename);
+        printf("Partial %s binary STL generated successfully in %s\n", currentShape.shapeType, filename);
     }
 }
 
@@ -944,8 +979,8 @@ void process_STL(int size) {
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
 
-        const char *filename = "../Resources/binary.stl";  // Output binary STL file
-        const char create[50];
+        char *filename = "../Resources/binary.stl";  // Output binary STL file
+        char create[50];
         snprintf(create, sizeof(create), "touch %s", filename);
         system(create);
 
@@ -957,7 +992,7 @@ void process_STL(int size) {
             writeCubeToBinarySTL(size, filename);
         }
         else if (strcmp(currentShape.shapeType, "cylinder") == 0) {
-            writeCylinderToBinarySTL(currentShape.param1, currentShape.param2, currentShape.slices,filename);
+            writeCylinderToBinarySTL(size, currentShape.slices,filename);
         }
         else if (strcmp(currentShape.shapeType, "cone") == 0) {
             writeConeToBinarySTL(size, currentShape.slices,filename);
@@ -966,11 +1001,11 @@ void process_STL(int size) {
             writePyramidToBinarySTL(size,filename);
         }
         else if (strcmp(currentShape.shapeType, "prism") == 0) {
-            writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
+            writePrismToBinarySTL(size, currentShape.n,filename);
         }
 
         stl_to_h_file(filename);
 
-        printf("%s Binary STL generated successfully in %s\n", currentShape.shapeType, filename);
+        printf("%s binary STL generated successfully in %s\n", currentShape.shapeType, filename);
     }
 }
