@@ -872,7 +872,7 @@ void stl_to_h_file(const char *filePath) {
     free(mesh.triangles);
     free(mesh.normals);
 
-    printf("Header file generated successfully in ../pruebaconect/shapes.h");
+    printf("Header file generated successfully in ../pruebaconect/shapes.h\n");
 }
 
 void process_partial_STL(int rank, int size, const char* input) {
@@ -936,7 +936,7 @@ void process_partial_STL(int rank, int size, const char* input) {
             writePrismToBinarySTL(currentShape.param1, currentShape.param2, currentShape.n,filename);
         }
 
-        printf("Partial %s Binary STL generated successfully in %s", currentShape.shapeType, filename);
+        printf("Partial %s Binary STL generated successfully in %s\n", currentShape.shapeType, filename);
     }
 }
 
@@ -971,6 +971,6 @@ void process_STL(int size) {
 
         stl_to_h_file(filename);
 
-        printf("%s Binary STL generated successfully in %s", currentShape.shapeType, filename);
+        printf("%s Binary STL generated successfully in %s\n", currentShape.shapeType, filename);
     }
 }
