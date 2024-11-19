@@ -155,6 +155,12 @@ void parseInput(const char* input) {
     }
 }
 
+/**
+ * Function that appends all partial STL files to the final STL file.
+ * @param size The number of partial files created
+ * @param filename The route to final STL file
+ * @author Eduardo Bolivar Minguet
+ */
 void appendBytes(int size, const char* filename) {
     FILE *file = fopen(filename, "ab");
 
@@ -884,6 +890,19 @@ void stl_to_h_file(const char *filePath) {
     printf("Header file generated successfully in ../pruebaconect/shapes.h\n");
 }
 
+/**
+ * Function calculates the limits of processing for all processing nodes
+ * @param rank The rank of current node
+ * @param size Total nodes processing
+ * @param n Number of iterations per loop
+ * @param start1 Start for loop 1
+ * @param end1 End for loop 1
+ * @param start2 Start for loop 2
+ * @param end2 End for loop 2
+ * @param start3 Start for loop 3
+ * @param end3 End for loop 3
+ * @author Eduardo Bolivar Minguet
+ */
 void compute_workload(int rank, int size, int n, int *start1, int *end1, int *start2, int *end2, int *start3, int *end3) {
     int total_work = 3 * n; // Total iterations across all loops
     int workload_per_node = total_work / size;
@@ -918,6 +937,17 @@ void compute_workload(int rank, int size, int n, int *start1, int *end1, int *st
     }
 }
 
+/**
+ * Calculates the limits of processing between nodes for two loops
+ * @param rank The rank of current node
+ * @param size Total processing nodes
+ * @param n Number of iterations per loop
+ * @param start1 Start for loop 1
+ * @param end1 End for loop 1
+ * @param start2 Start for loop 2
+ * @param end2 End for loop 2
+ * @author Eduardo Bolivar Minguet
+ */
 void compute_workload_two_loops(int rank, int size, int n, int *start1, int *end1, int *start2, int *end2) {
     int total_work = 2 * n; // Total iterations across both loops
     int workload_per_node = total_work / size;
@@ -944,6 +974,13 @@ void compute_workload_two_loops(int rank, int size, int n, int *start1, int *end
     }
 }
 
+/**
+ * Process partial STL generation
+ * @param rank The rank of current node
+ * @param size total nodes processing
+ * @param input Instruction to process
+ * @authors Michael Valverde, Eduardo Bolivar
+ */
 void process_partial_STL(int rank, int size, const char* input) {
     parseInput(input);  // Parse the input string
 
@@ -1013,6 +1050,11 @@ void process_partial_STL(int rank, int size, const char* input) {
     }
 }
 
+/**
+ * Writes the final STL file
+ * @param size Total of partial STL files created.
+ * @authors Michael Valverde, Eduardo Bolivar
+ */
 void process_STL(int size) {
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
@@ -1048,6 +1090,10 @@ void process_STL(int size) {
     }
 }
 
+/**
+ * Clear the array of figures for a new instruction
+ * @author Eduardo Bolivar Minguet
+ */
 void clearFigures() {
     memset(shapes, 0, sizeof(shapes));
     shapeCount = 0;
