@@ -137,6 +137,8 @@ int main(int argc, char * argv[])
 
                     combine_figures();
 
+                    stl_to_h_file("../Resources/merged_shapes.stl");
+
                     send_serial(); //Enviar al Hardware
 
                     clearFigures(); // Limpia el array de figuras para una nueva instruccion

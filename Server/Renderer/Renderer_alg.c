@@ -1087,29 +1087,6 @@ void process_STL(int size) {
         }
 
         printf("%s binary STL generated successfully in %s\n", currentShape.shapeType, filename);
-
-        //stl_to_h_file(filename);
-
-        // Define the input STL files
-        //const char *file_list[] = {
-        //    "../Resources/binary.stl",
-        //     "../pruebaconect/prism_binary.stl",
-        //    "../pruebaconect/cone_binary.stl"
-         //};
-
-        //int num_files = sizeof(file_list) / sizeof(file_list[0]);
-
-        // Output file name
-        //const char *output_file = "../Resources/merged_shapes.stl";
-
-
-
-        //if (combine_meshes(output_file, file_list, num_files) == 0) {
-        //    printf("STL files combined successfully into %s\n", output_file);
-        //} else {
-        //    printf("Error combining STL files\n");
-        //}
-
     }
 }
 
