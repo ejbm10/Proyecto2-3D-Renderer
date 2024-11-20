@@ -10,6 +10,7 @@
 #include "Renderer_alg.h"
 #include "STL_to_h_converter.h"
 #include "stl_merger.h"
+#include <dirent.h>
 
 #define MAX_SHAPES 10
 #define M_PI 3.14159265358979323846
@@ -1110,6 +1111,57 @@ void process_STL(int size) {
         //}
 
     }
+}
+
+void combine_figures() {
+    DIR *dir;
+    struct dirent *entry;
+    char *directory = "../Resources";  // Directory to scan
+    char *target_suffix = "_binary.stl";
+    char *output[10];
+    int file_count = 0;
+
+    // Open the directory
+    dir = opendir(directory);
+    if (dir == NULL) {
+        perror("Failed to open directory");
+        return 1;
+    }
+
+    // Read directory entries
+    while ((entry = readdir(dir)) != NULL) {
+        // Check if the file ends with "_binary.stl"
+        size_t len = strlen(entry->d_name);
+        if (len > strlen(target_suffix) && strcmp(entry->d_name + len - strlen(target_suffix), target_suffix) == 0) {
+            // Allocate memory for the file path and store it in the output array
+            if (file_count < 10) {
+                output[file_count] = (char *)malloc(strlen(directory) + strlen(entry->d_name) + 3);
+                if (output[file_count] != NULL) {
+                    snprintf(output[file_count], 256, "../Resources/%s", entry->d_name);
+                    file_count++;
+                }
+            }
+        }
+    }
+
+    // Close the directory
+    closedir(dir);
+
+    const char *output_file = "../Resources/merged_shapes.stl";
+    system("touch ../Resources/merged_shapes.stl");
+
+    if (combine_meshes(output_file, output, file_count) == 0) {
+        printf("STL files combined successfully into %s\n", output_file);
+    } else {
+        printf("Error combining STL files\n");
+    }
+
+    // Output the array of file paths
+    for (int i = 0; i < file_count; i++) {
+        free(output[i]); // Don't forget to free allocated memory
+    }
+
+    return 0;
 }
 
 /**

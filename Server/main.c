@@ -135,6 +135,8 @@ int main(int argc, char * argv[])
 
                     process_STL(size); //Enviar figura
 
+                    combine_figures();
+
                     send_serial(); //Enviar al Hardware
 
                     clearFigures(); // Limpia el array de figuras para una nueva instruccion
