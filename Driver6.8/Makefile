@@ -12,13 +12,13 @@ clean:
 		Module.markers modules.order *.a *.mod
 
 load:
-	sudo insmod drivern.ko || echo "Error: Verifica que el módulo no esté ya cargado"
+	sudo insmod driverp.ko || echo "Error: Verifica que el módulo no esté ya cargado"
 
 unload:
-	sudo rmmod drivern || echo "Error: Verifica que el módulo esté cargado"
+	sudo rmmod driverp || echo "Error: Verifica que el módulo esté cargado"
 
 else
 # Archivo del módulo
-obj-m := drivern.o
+obj-m := driverp.o
 endif
 
