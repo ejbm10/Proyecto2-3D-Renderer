@@ -26,6 +26,7 @@ typedef struct {
 
 int load_stl(const char *filename, STLHeader *header, Triangle_ **triangles);
 int save_stl(const char *filename, STLHeader *header, Triangle_ *triangles);
+void calculate_bounding_box(const Triangle_ *triangles, unsigned int num_triangles, float *min_x, float *max_x);
 int combine_meshes(const char *output_filename, const char **file_list, int num_files);
 
 
