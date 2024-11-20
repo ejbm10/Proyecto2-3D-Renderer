@@ -178,7 +178,7 @@ int combine_meshes(const char *output_filename, const char **file_list, int num_
 
     unsigned int offset_triangle_count = 0;
     float current_offset = 0.0f;
-    float gap = 5.0f;  // Add a small gap between objects
+    float gap = 2.0f;  // Add a small gap between objects
 
     for (int i = 0; i < num_files; ++i) {
         // Calculate the bounding box of the current mesh

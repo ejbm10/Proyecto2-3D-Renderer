@@ -32,15 +32,9 @@ void setup() {
 }
 
 ///a colorful triangle shader actually calculated per triangle
-VGA14Bit::Color myTriangleShader(int trinangleNo, short *v0, short *v1, short *v2, const signed char *normal, VGA14Bit::Color color)
-{
-  //normals packed in 1 signed byte per axis
-  const float scaleN = 1.0f / 127.0f;
-  const float nx = normal[0] * scaleN;
-  const float ny = normal[1] * scaleN;
-  const float nz = normal[2] * scaleN;
-  //return R5G5B4 color each normal axis controls each color component
-  return (int(15 * nx + 16)) | (int(15 * nz + 16) << 5) | (int(7 * ny + 8) << 10);
+VGA14Bit::Color myTriangleShader(int trinangleNo, short *v0, short *v1, short *v2, const signed char *normal, VGA14Bit::Color color) {
+    // Hacer que todos los triángulos sean visibles, ignorando la orientación
+    return color;
 }
 
 
@@ -49,7 +43,7 @@ VGA14Bit::Color myTriangleShader(int trinangleNo, short *v0, short *v1, short *v
 void drawModel()
 {
   //perspective transformation
-  static Matrix perspective = Matrix::translation(videodisplay.xres / 2, videodisplay.yres / 2, 0) * Matrix::scaling(50 * videodisplay.pixelAspect(), 50, 50) * Matrix::perspective(90, 1, 10);
+  static Matrix perspective = Matrix::translation(videodisplay.xres / 2, videodisplay.yres / 2, 0) * Matrix::scaling(100 * videodisplay.pixelAspect(), 100, 100) * Matrix::perspective(90, 1, 10);
   static float u = 0;
   u += 0.02;
   //rotate model
