@@ -69,6 +69,7 @@ CMakeFiles/Server.dir/Renderer/Renderer_alg.c.o
  /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.c
  /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/Renderer_alg.h
  /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/STL_to_h_converter.h
+ /home/ejbm0110/Documents/Github/Proyecto2-3D-Renderer/Server/Renderer/stl_merger.h
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/gl.h
  /usr/include/GL/glext.h
@@ -294,6 +295,7 @@ CMakeFiles/Server.dir/Renderer/stl_merger.c.o
  /usr/include/x86_64-linux-gnu/sys/cdefs.h
  /usr/include/x86_64-linux-gnu/sys/select.h
  /usr/include/x86_64-linux-gnu/sys/types.h
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/float.h
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h

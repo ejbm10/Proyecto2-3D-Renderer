@@ -161,12 +161,12 @@ void parseInput(const char* input) {
  * @param filename The route to final STL file
  * @author Eduardo Bolivar Minguet
  */
-void appendBytes(int size, const char* filename) {
+void appendBytes(int size, const char* figure, const char* filename) {
     FILE *file = fopen(filename, "ab");
 
     for (int partials = 0; partials < size; partials++) {
         char p_filename[50];
-        snprintf(p_filename, sizeof(p_filename), "../Resources/partial_binary_%d.stl", partials);
+        snprintf(p_filename, sizeof(p_filename), "../Resources/partial_%s_binary_%d.stl", figure, partials);
 
         FILE *pfile = fopen(p_filename, "rb");
         if (!pfile) {
@@ -204,7 +204,7 @@ void writeSphereToBinarySTL(int size, GLint slices, GLint stacks, const char *fi
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "sphere", filename);
 }
 
 void partialSphere(GLfloat radius, GLint slices, GLint stackStart, GLint stackEnd, GLint total_stacks, const char *filename) {
@@ -324,7 +324,7 @@ void writeConeToBinarySTL(int size, GLint slices, const char *filename) {
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "cone", filename);
 }
 
 void partialCone(GLfloat radius, GLfloat height, GLint startSlice1, GLint endSlice1, GLint startSlice2, GLint endSlice2, GLint total_slices, const char* filename) {
@@ -443,7 +443,7 @@ void writeCubeToBinarySTL(int size, const char *filename) {
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "cube", filename);
 }
 
 void partialCube(GLfloat sideLength, int faceStart, int faceEnd, const char* filename) {
@@ -535,7 +535,7 @@ void writePyramidToBinarySTL(int size, const char *filename) {
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "pyramid", filename);
 }
 
 void partialPyramid(GLfloat height, int faceStart, int faceEnd, const char* filename) {
@@ -639,7 +639,7 @@ void writeCylinderToBinarySTL(int size, int n, const char *filename) {
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "cylinder", filename);
 }
 
 void partialCylinder(float radius, float length, int start1N, int end1N, int start2N, int end2N, int start3N, int end3N,  int totalN, const char *filename) {
@@ -776,7 +776,7 @@ void writePrismToBinarySTL(int size, int n, const char *filename) {
 
     fclose(file);
 
-    appendBytes(size, filename);
+    appendBytes(size, "prism", filename);
 }
 
 void partialPrism(float radius, float length, int start1N, int end1N, int start2N, int end2N, int start3N, int end3N, int total_n, const char* filename) {
@@ -987,8 +987,8 @@ void process_partial_STL(int rank, int size, const char* input) {
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
 
-        char filename[100];
-        snprintf(filename, sizeof(filename), "../Resources/partial_binary_%d.stl", rank);  // Output binary STL file
+        char filename[1024];
+        snprintf(filename, sizeof(filename), "../Resources/partial_%s_binary_%d.stl", currentShape.shapeType, rank);  // Output binary STL file
         char create[1024];
         snprintf(create, sizeof(create), "touch %s", filename);
         system(create);
@@ -1059,8 +1059,9 @@ void process_STL(int size) {
     for (int i = 0; i < shapeCount; i++) {
         Shape currentShape = shapes[i];
 
-        char *filename = "../Resources/binary.stl";  // Output binary STL file
-        char create[50];
+        char filename[1024];
+        snprintf(filename, sizeof(filename), "../Resources/%s_binary.stl", currentShape.shapeType);  // Output binary STL file
+        char create[1024];
         snprintf(create, sizeof(create), "touch %s", filename);
         system(create);
 
