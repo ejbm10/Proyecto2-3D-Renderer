@@ -1,0 +1,4 @@
+# ninja log v6
+1	35	1730838834672987257	CMakeFiles/Server.dir/RSA/rsa.c.o	723a21f978b9679c
+42	58	1730838834713987450	Server	6adad7481d84a4b5
+0	42	1730838834671987252	CMakeFiles/Server.dir/main.c.o	d3d2801dee50ba6c
